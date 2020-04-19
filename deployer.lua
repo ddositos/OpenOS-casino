@@ -14,7 +14,7 @@ local modules = {
 	"db", "request"
 }
 
-local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino"
+local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
 
 
 local function writeToFile(path, content)
@@ -37,7 +37,6 @@ local function save_modules()
 	end
     print("Модули загружены")
 end
-
 
 local function deploy()
     print(string.format("Установка \"%s\"", CONFIG.name))
