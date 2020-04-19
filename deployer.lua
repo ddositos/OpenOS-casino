@@ -25,7 +25,8 @@ end
 
 local function save_modules()
 	print("Загрузка модулей")
-	for module in modules do 
+	for i = 1, #modules do
+		local module = modules[i]
 		print("Загрузка модуля " .. module)
 		shell.execute(string.format(
 			"wget -fq %s/modules/dsx_%s.lua /lib/dsx_%s.lua",
