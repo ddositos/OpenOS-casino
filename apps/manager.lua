@@ -29,8 +29,7 @@ register_comand("help", 0,
 	function(comand)
 		if comand == nil then
 			for alias, value in pairs(comands) do
-				io.write(string.format("%s %s\n", alias, help))
-				
+				io.write(string.format("%s %s\n", alias, value.help))
 			end
 			return ""
 		end
