@@ -12,10 +12,11 @@ local CONFIG = {
 }
 
 local modules = {
-	"db", "request"
+	"db", "buttons"
 }
 local apps = {
-	manager = "manager"
+	manager = "manager",
+	resolution = "resolution"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
