@@ -54,7 +54,7 @@ register_comand("close", 0,
 	end)
 
 register_comand("get", 1,
-	"Получить баланс игрока\nget <nickname:string>"
+	"Получить баланс игрока\nget <nickname:string>",
 	function(nickname)
 		return db:get(nickname) .. " эм"
 	end)
