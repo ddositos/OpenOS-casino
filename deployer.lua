@@ -49,7 +49,7 @@ local function load_apps()
 		fs.makeDirectory("/home/apps/")
 	end
 
-	for label, name in apps do
+	for label, name in pairs(apps) do
 		print("Загрузка приложения " .. label)
 		
 		shell.execute(string.format(
