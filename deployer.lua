@@ -5,6 +5,7 @@ if not component.isAvailable("internet") then
 end
 local computer = require("computer")
 local shell = require("shell")
+local fs = require("filesystem")
 
 local CONFIG = {
 	name = "dsx-casino"
@@ -12,6 +13,9 @@ local CONFIG = {
 
 local modules = {
 	"db", "request"
+}
+local apps = {
+	manager = "manager"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
@@ -23,7 +27,7 @@ local function writeToFile(path, content)
     file:close()
 end
 
-local function save_modules()
+local function load_modules()
 	print("Загрузка модулей")
 	for i = 1, #modules do
 		local module = modules[i]
@@ -38,9 +42,30 @@ local function save_modules()
     print("Модули загружены")
 end
 
+local function load_apps()
+	print("Загрузка приложений")
+	
+	if not fs.isDirectory("/home/apps/") then
+		fs.makeDirectory("/home/apps/")
+	end
+
+	for label, name in apps do
+		print("Загрузка приложения " .. label)
+		
+		shell.execute(string.format(
+			"wget -fq %s/apps/%s.lua /home/apps/%s.lua",
+			github,
+			name,
+			name
+		))
+	end
+	print("Приложения загружены")
+end
+
 local function deploy()
     print(string.format("Установка \"%s\"", CONFIG.name))
-    save_modules()
+	load_modules()
+	load_apps()
     print('Application successfully deployed.')
 end
 
