@@ -1,3 +1,3 @@
 return {
-	admins = {"doritosxxx", "Vsop", "Noobaralisimus"}
+	admins = {"doritosxxx", "Noobaralisimus"}
 }
