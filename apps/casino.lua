@@ -9,9 +9,8 @@ local Area = require("dsx_area")
 
 local WIDTH = 107
 local HEIGHT = 23
-gpu.setResolution(WIDTH, HEIGHT)
 
-local ws1 = Workspace:new()
+local ws1 = Workspace:new(WIDTH, HEIGHT)
 --задний фон
 ws1:bind(1,1, WIDTH, HEIGHT, 0x005500)
 --белая рамка
@@ -126,6 +125,7 @@ ws1:text(77, 12, "28", 0x000000, 0xffffff)
 ws1:bind(82, 11, 5, 3, 0x000000)
 ws1:text(84, 12, "31", 0x000000, 0xffffff)
 
+--[[
 ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function(x,y)
 	local colorB, modeB = gpu.setBackground(0x000000)
 	local colorF, modeF = gpu.setForeground(0xffffff)
@@ -133,6 +133,15 @@ ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function(x,y)
 	gpu.setBackground(colorB, modeB)
 	gpu.setForeground(colorF, modeF)
 end)
+
+]]--
+
+
+ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function()
+	error("ну нахуя сука")
+end)
+
+
 
 ws1:draw()
 

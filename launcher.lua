@@ -1,5 +1,6 @@
 local fs = require("filesystem")
 local gpu = require("component").gpu
+local ExceptionHandler = require("dsx_exception")
 
 local apps = {}
 local apps_assoc = {}
@@ -34,6 +35,7 @@ end
 --io.write(string.format("Выбрано приложение %s.\nНажмите enter для запуска.", apps[id]:gsub(".lua", "")))
 --io.read()
 
+local path = "/home/apps/" .. apps[id]
 
-
-
+local app = ExceptionHandler:new(loadfile(path))
+app:run()
