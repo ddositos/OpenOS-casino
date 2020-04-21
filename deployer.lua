@@ -62,10 +62,23 @@ local function load_apps()
 	print("Приложения загружены")
 end
 
+local load_launcher()
+	print("Настройка автозапуска")
+	shell.execute(string.format(
+		"wget -fq %s/launcher.lua /home/launcher.lua",
+		github
+	))
+	local shrc = io.open("/home/.shrc", "w")
+	shrc.write("/home/launcher.lua\n")
+	shrc.close()
+	print("Автозапуск настроен")
+end
+
 local function deploy()
     print(string.format("Установка \"%s\"", CONFIG.name))
 	load_modules()
 	load_apps()
+	load_launcher()
     print('Application successfully deployed.')
 end
 
