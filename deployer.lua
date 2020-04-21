@@ -15,7 +15,7 @@ local modules = {
 	"area", "buttons", "db", "polygon", "text", "workspace"
 }
 local apps = {
-	manager, fullscreen, casino
+	"manager", "fullscreen", "casino"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
