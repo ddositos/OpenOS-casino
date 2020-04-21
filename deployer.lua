@@ -12,11 +12,10 @@ local CONFIG = {
 }
 
 local modules = {
-	"db", "buttons"
+	"area", "buttons", "db", "polygon", "text", "workspace"
 }
 local apps = {
-	manager = "manager",
-	fullscreen = "fullscreen"
+	manager, fullscreen, casino
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
@@ -50,8 +49,8 @@ local function load_apps()
 		fs.makeDirectory("/home/apps/")
 	end
 
-	for label, name in pairs(apps) do
-		print("Загрузка приложения " .. label)
+	for key, name in pairs(apps) do
+		print("Загрузка приложения " .. name)
 		
 		shell.execute(string.format(
 			"wget -fq %s/apps/%s.lua /home/apps/%s.lua",
