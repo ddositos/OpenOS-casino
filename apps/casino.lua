@@ -138,7 +138,7 @@ end)
 
 
 ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function()
-	error("ну нахуя сука")
+	error("хули тыкаешь?")
 end)
 
 
