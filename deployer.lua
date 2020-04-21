@@ -62,7 +62,7 @@ local function load_apps()
 	print("Приложения загружены")
 end
 
-local load_launcher()
+local function load_launcher()
 	print("Настройка автозапуска")
 	shell.execute(string.format(
 		"wget -fq %s/launcher.lua /home/launcher.lua",
