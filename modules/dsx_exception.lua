@@ -1,6 +1,7 @@
 local Workspace = require("dsx_workspace")
 local term = require("term")
 local gpu = require("component").gpu
+local constants = require("dsx_constants")
 
 local Handler = {}
 function Handler:new(app)
@@ -13,8 +14,13 @@ function Handler:new(app)
 		local ws = Workspace:new(160, 50)
 		ws:bind(1,1,160,50, 0x222222)
 		ws:text(77, 5, "пиздец", 0x222222, 0xffffff)
-		ws:bind(1, 45, 160, 5, 0xeeeeee, function(x,y,nickname)
-			io.write(string.format("%i %i %s", x,y,nickname))
+		ws:bind(1, 45, 160, 6, 0xeeeeee, function(x,y,nickname)
+			for _, admin in pairs(constants.admins) do
+				if nickname == admin then
+					return true
+				end
+			end
+			return false
 		end)
 		ws:text(75, 47, "Перезапустить", 0xeeeeee, 0x222222)
 		ws:draw()
@@ -24,8 +30,8 @@ function Handler:new(app)
 		term.setCursor(3,7)
 		term.write(reason, true)
 
-		while 1 do
-			ws.buttons:pull()
+		while not ws.buttons:pull() do
+			--do nothing
 		end
 	end
 

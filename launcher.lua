@@ -41,4 +41,6 @@ end
 local path = "/home/apps/" .. apps[id]
 
 local app = ExceptionHandler:new(loadfile(path))
-app:run()
+while 1 do
+	app:run()
+end
