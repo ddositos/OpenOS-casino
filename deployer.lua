@@ -69,8 +69,8 @@ local load_launcher()
 		github
 	))
 	local shrc = io.open("/home/.shrc", "w")
-	shrc.write("/home/launcher.lua\n")
-	shrc.close()
+	shrc:write("/home/launcher.lua\n")
+	shrc:close()
 	print("Автозапуск настроен")
 end
 
