@@ -16,7 +16,7 @@ function Text:new(x,y,text, background, foreground)
 		end
 		prev, flag = gpu.getForeground()
 		if flag or prev ~= self.foreground then
-			gpu.getForeground(foreground)
+			gpu.setForeground(foreground)
 		end
 		gpu.set(self.x, self.y, self.text)
 	end

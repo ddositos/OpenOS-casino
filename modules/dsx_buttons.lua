@@ -15,14 +15,16 @@ function Buttons:new()
 	end
 
 	function obj:pull()
-		local _,_,x,y = event.pull("touch")
+		local _,_,x,y,nickname = event.pull("touch")
 		for i = #self.list, 1,-1 do
 			local button = self.list[i]
-			if  button.x <= x and x <= button.x+button.width and
-				button.y <= y and y <= button.y+button.height then
-				return button.callback(x,y)
+			if  button.x <= x and x < button.x+button.width and
+				button.y <= y and y < button.y+button.height then
+				gpu.set(x,y,"btn")
+				return button.callback(x,y,nickname)
 			end
 		end
+		gpu.set(x,y,"no")
 		return ""
 	end
 

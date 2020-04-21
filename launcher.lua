@@ -1,10 +1,13 @@
 local fs = require("filesystem")
 local gpu = require("component").gpu
+local term = require("term")
 local ExceptionHandler = require("dsx_exception")
 
 local apps = {}
 local apps_assoc = {}
 local i = 1;
+
+term.clear()
 io.write("Доступные приложения:\n")
 for file in fs.list('/home/apps') do
 	table.insert(apps, file)
