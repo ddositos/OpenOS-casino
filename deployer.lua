@@ -12,7 +12,7 @@ local CONFIG = {
 }
 
 local modules = {
-	"area", "buttons", "db", "exception", "polygon", "text", "workspace"
+	"area", "buttons","constants", "db", "exception", "polygon", "text", "workspace"
 }
 local apps = {
 	"manager", "fullscreen", "casino"
