@@ -130,7 +130,7 @@ local function logic2(nickname) --основное меню
 			return
 		elseif type == action.withdraw then
 			ws_loading:draw()
-			local status, reason = withdraw_wrapper()
+			local status, reason = withdraw_wrapper(nickname)
 			ws:draw()
 		elseif type == action.deposit then
 			--TODO
