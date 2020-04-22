@@ -39,7 +39,7 @@ end
 local function withdraw(nickname)
 	if redstone then
 		redstone.setOutput(2, 13)
-		os.sleep(1) --подогнать
+		os.sleep(0.4) --подогнать
 		redstone.setOutput(2, 0)
 	end
 	db:pay(nickname, -64)
