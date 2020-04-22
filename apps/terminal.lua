@@ -137,7 +137,7 @@ local function logic3(status, reason, nickname) --заберите железо/
 	else --ошибка
 		local ws = screenError(reason)
 		ws:draw()
-		while ws.buttons:pull(nickname) do
+		while not ws.buttons:pull(nickname) do
 			os.sleep(0)
 		end
 	end
@@ -155,15 +155,18 @@ local function logic2(nickname) --основное меню
 		drawCurrency()
 		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
-			return
+			return true -- logic 1
 		elseif type == action.withdraw then
 			ws_loading:draw()
+			os.sleep(0)
 			local status, reason = withdraw_wrapper(nickname)
 			logic3(status, reason, nickname)
+			return false
 		elseif type == action.deposit then
 			--TODO
+			return false
 		end
-		ws:draw()
+		
 	end
 end
 
@@ -174,7 +177,9 @@ local function logic1() --экран "начать"
 	while nickname == nil do
 		nickname = ws.buttons:pull()
 	end
-	logic2(nickname)
+	while not logic2(nickname) do
+		os.sleep(0)
+	end
 end
 
 
