@@ -38,7 +38,7 @@ end
 
 local function withdraw(nickname)
 	if redstone then
-		redstone.setOutput(2, 13)
+		redstone.setOutput(sides.north, 13)
 		os.sleep(0.4) --подогнать
 		redstone.setOutput(2, 0)
 	end
@@ -129,9 +129,9 @@ end
 local function logic3(status, reason, nickname) --заберите железо/ошибка
 	if status then --заберите железо
 		local ws = Workspace:new(50,25)
-		ws:text(20, 10, "Заберите железо", 0x222222, 0xeeeeee)
+		ws:text(24, 8, "Заберите железо", 0x222222, 0xeeeeee)
 		ws:draw()
-		while reason == getCurrencyAmount() do
+		while redstone.getInput(sides.west) do
 			os.sleep(0)
 		end
 	else --ошибка
