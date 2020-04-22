@@ -2,12 +2,23 @@ local component = require("component")
 local Workspace = require("dsx_workspace")
 local db = require("dsx_db"):new("pank228") --TODO: убрать
 
-local status, value = pcall(function() return component.me_interface end)
 local me
+local status, value = pcall(function() return component.me_interface end)
 if status then
 	me = value
 else 
 	me = false
+end
+
+local redstone
+local status, value = pcall(function() return component.redstone end)
+if status then
+	redstone = value
+else 
+	redstone = false
+end
+if redstone then
+	redstone.setOutput(2, 0)
 end
 
 local currency = {
@@ -24,6 +35,27 @@ local function getCurrencyAmount()
 	end
 	return temp[1].size
 end
+
+local function withdraw(nickname)
+	if redstone then
+		redstone.setOutput(2, 13)
+		os.sleep(1) --подогнать
+		redstone.setOutput(2, 0)
+	end
+	db:pay(nickname, -64)
+end
+
+local function withdraw_wrapper(nickname)
+	local currency = getCurrencyAmount()
+	if currency < 64 then
+		return false, "Недостаточно средств в банке"
+	end
+	if not db:has(nickname, 64) then
+		return false, "У вас недостаточно средств"
+	end
+	withdraw()
+end
+
 
 local action = {
 	exit = 1,
@@ -97,7 +129,9 @@ local function logic2(nickname) --основное меню
 		if type == action.exit then
 			return
 		elseif type == action.withdraw then
-			--TODO
+			ws_loading:draw()
+			local status, reason = withdraw_wrapper()
+			ws:draw()
 		elseif type == action.deposit then
 			--TODO
 		end
