@@ -2,6 +2,7 @@ local fs = require("filesystem")
 local gpu = require("component").gpu
 local term = require("term")
 local ExceptionHandler = require("dsx_exception")
+local event = require("event")
 
 local apps = {}
 local apps_assoc = {}
@@ -52,6 +53,7 @@ end
 local path = "/home/apps/" .. apps[id] .. ".lua"
 
 local app = ExceptionHandler:new(loadfile(path))
+
 while 1 do
 	app:run()
 	os.sleep(0)

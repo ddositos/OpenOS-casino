@@ -8,9 +8,14 @@ function Buttons:new()
 	local obj = {}
 	obj.list = {}
 
-	function obj:register(area, callback)
-		area.callback = callback
-		table.insert(self.list, area)
+	function obj:register(x,y,width,height, callback)
+		table.insert(self.list, {
+			x=x,
+			y=y,
+			width=width,
+			height=height,
+			callback=callback
+		})
 		return
 	end
 

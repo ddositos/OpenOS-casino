@@ -14,7 +14,7 @@ function Handler:new(app)
 		local ws = Workspace:new(160, 50)
 		ws:bind(1,1,160,50, 0x222222)
 		ws:text(77, 5, "пиздец", 0x222222, 0xffffff)
-		ws:bind(1, 45, 160, 6, 0xeeeeee, function(x,y,nickname)
+		ws:bind(1, 44, 160, 7, 0xeeeeee, function(x,y,nickname)
 			for _, admin in pairs(constants.admins) do
 				if nickname == admin then
 					return true

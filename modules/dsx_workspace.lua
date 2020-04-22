@@ -1,6 +1,5 @@
 local gpu = require("component").gpu
 local Buttons = require("dsx_buttons")
-local Area = require("dsx_area")
 local Polygon = require("dsx_polygon")
 local Text = require("dsx_text")
 
@@ -18,15 +17,7 @@ function Workspace:new(width, height)
 		table.insert(self.elements, Polygon:new(x, y, width, height, background))
 
 		if callback then
-			self.buttons:register(
-				Area:new(
-					x, 
-					y,
-					width,
-					height
-				),
-				callback
-			)
+			self.buttons:register(x,y,width,height,callback)
 		end
 	end
 
@@ -44,13 +35,7 @@ function Workspace:new(width, height)
 	end
 
 	function obj:debug()
-		self.buttons:register(Area:new(
-			1, 
-			1,
-			self.width,
-			self.height
-		),
-		function(x,y)
+		self.buttons:register(1, 1, self.width, self.height, function(x,y)
 			local colorB, modeB = gpu.setBackground(0x000000)
 			local colorF, modeF = gpu.setForeground(0xffffff)
 			gpu.set(x,y,x .. " " .. y)

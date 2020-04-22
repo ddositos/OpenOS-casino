@@ -64,7 +64,7 @@ register_comand("close", 0,
 register_comand("get", 1,
 	"Получить баланс игрока\nget <nickname:string>",
 	function(nickname)
-		return tostring(db:get(nickname)/100) .. " эм"
+		return tostring(db:get(nickname)) .. " эм"
 	end)
 
 register_comand("pay", 2, 

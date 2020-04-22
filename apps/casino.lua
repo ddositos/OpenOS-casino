@@ -5,7 +5,6 @@ local internet = require("internet")
 local Polygon = require("dsx_polygon")
 local Text = require("dsx_text")
 local Workspace = require("dsx_workspace")
-local Area = require("dsx_area")
 
 local WIDTH = 107
 local HEIGHT = 23
@@ -125,22 +124,9 @@ ws1:text(77, 12, "28", 0x000000, 0xffffff)
 ws1:bind(82, 11, 5, 3, 0x000000)
 ws1:text(84, 12, "31", 0x000000, 0xffffff)
 
---[[
-ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function(x,y)
-	local colorB, modeB = gpu.setBackground(0x000000)
-	local colorF, modeF = gpu.setForeground(0xffffff)
-	gpu.set(x,y, x .. ' ' .. y)
-	gpu.setBackground(colorB, modeB)
-	gpu.setForeground(colorF, modeF)
-end)
-
-]]--
-
-
-ws1.buttons:register(Area:new(1,1,WIDTH, HEIGHT), function()
+ws1.buttons:register(1,1,WIDTH, HEIGHT, function()
 	error("хули тыкаешь?")
 end)
-
 
 
 ws1:draw()

@@ -12,7 +12,7 @@ local CONFIG = {
 }
 
 local modules = {
-	"dsx_area", "dsx_buttons", "dsx_constants", "dsx_db",
+	"dsx_buttons", "dsx_constants", "dsx_db",
 	"dsx_exception", "dsx_polygon", "dsx_text", "dsx_workspace",
 	"event"
 }
