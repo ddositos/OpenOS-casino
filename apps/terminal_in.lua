@@ -114,6 +114,7 @@ local function screenWait()
 	local ws = Workspace:new()
 	ws:bind(1,1,50,25, 0x222222)
 	ws:text(16, 12, "Загрузка валюты...", 0x222222, 0xeeeeee)
+	ws:draw()
 end
 
 local function logic2(nickname) --основное меню
