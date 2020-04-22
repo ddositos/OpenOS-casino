@@ -53,13 +53,14 @@ local function screen2(nickname)
 		return nil
 	end)
 	ws:text(9,17,"Пополнить", 0xeeeeee, 0x222222)
-	ws:bind(27,14,22,7,0xeeeeee)
-	ws:text(35,17,"Снять", 0xeeeeee, 0x222222, function(x,y,nickname, user)
+	ws:text(8,18,"Комиссия 5%", 0xeeeeee, 0x222222)
+	ws:bind(27,14,22,7,0xeeeeee, function(x,y,nickname,user)
 		if nickname == user then
 			return action.withdraw
 		end
 		return nil
 	end)
+	ws:text(34,17,"Снять 64", 0xeeeeee, 0x222222)
 	ws:bind(3,22, 46, 3, 0xeeeeee, function() 
 		return action.exit
 	end)
@@ -92,7 +93,7 @@ local function logic2(nickname) --основное меню
 	ws:draw()
 	while 1 do
 		drawCurrency()
-		local type = ws.buttons:pull()
+		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
 			return
 		elseif type == action.withdraw then
