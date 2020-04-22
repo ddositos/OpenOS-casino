@@ -94,15 +94,7 @@ local function screen2(nickname)
 	ws:text(3,2, "Пользователь: " .. nickname, 0x222222, 0xeeeeee)
 	ws:text(3,3, "Баланс: " , 0x222222, 0xeeeeee)
 	ws:text(3,4, "Доступно на вывод: " , 0x222222, 0xeeeeee)
-	ws:bind(3,14,22,7,0xeeeeee, function(x,y,_nickname)
-		if nickname == _nickname then
-			return action.deposit
-		end
-		return nil
-	end)
-	ws:text(9,17,"Пополнить", 0xeeeeee, 0x222222)
-	ws:text(8,18,"Комиссия 5%", 0xeeeeee, 0x222222)
-	ws:bind(27,14,22,7,0xeeeeee, function(x,y,nickname,user)
+	ws:bind(3,14,46,7,0xeeeeee, function(x,y,nickname,user)
 		if nickname == user then
 			return action.withdraw
 		end
@@ -186,9 +178,6 @@ local function logic2(nickname) --основное меню
 			os.sleep(0)
 			local status, reason = withdraw_wrapper(nickname)
 			logic3(status, reason, nickname)
-			return false
-		elseif type == action.deposit then
-			--TODO
 			return false
 		end
 		
