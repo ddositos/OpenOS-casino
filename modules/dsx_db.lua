@@ -10,9 +10,11 @@ function Database:new(token)
 
 	function obj:API_request(type, params)
 		params.token = self.token
+		local data = ""
 		for temp in internet.request(self.url .. type .. "/", params ) do      
-			return temp
+			data = data ..  temp
 		end
+		return data
 	end
 
 	function obj:get(nickname)
