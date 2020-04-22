@@ -119,9 +119,9 @@ end
 local function screenError(reason)
 	local ws = Workspace:new(50,25)
 	ws:bind(1,1,50,25, 0x222222, function(x,y,nickname, user)
-		return nickname == user
+		return true
 	end)
-	ws:text(17, 12, reason, 0x222222, 0xeeeeee)
+	ws:text(15, 12, reason, 0x222222, 0xeeeeee)
 	return ws
 end
 
