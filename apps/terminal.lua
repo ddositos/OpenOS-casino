@@ -147,7 +147,7 @@ local function logic3(status, reason, nickname) --заберите железо/
 		ws:bind(1,1,50,25, 0x222222)
 		ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
 		ws:draw()
-		while not redstone.getInput(sides.east) do
+		while not redstone.getInput(sides.west) do
 			os.sleep(0)
 		end
 	else --ошибка
