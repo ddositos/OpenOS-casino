@@ -136,6 +136,12 @@ end
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
 	local ws_loading = loadingscreen()
+	if redstone.getInput(sides.west) ~= 0 then
+		screenTakeIron()
+		while redstone.getInput(sides.west) ~= 0 do
+			os.sleep(0)
+		end
+	end
 	ws_loading:draw()
 	os.sleep(0)
 	local balance = db:get(nickname)
