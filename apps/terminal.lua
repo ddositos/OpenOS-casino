@@ -18,7 +18,7 @@ else
 	redstone = false
 end
 if redstone then
-	redstone.setOutput(2, 0)
+	redstone.setOutput(sides.north, 0)
 end
 
 local currency = {
@@ -40,7 +40,7 @@ local function withdraw(nickname)
 	if redstone then
 		redstone.setOutput(sides.north, 13)
 		os.sleep(0.4) --подогнать
-		redstone.setOutput(2, 0)
+		redstone.setOutput(sides.north, 0)
 	end
 	db:pay(nickname, -64)
 end
