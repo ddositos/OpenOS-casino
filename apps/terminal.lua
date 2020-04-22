@@ -33,7 +33,7 @@ else
 	redstone = false
 end
 if redstone then
-	redstone.setOutput(sides.north, 0)
+	redstone.setOutput(sides.south, 0)
 end
 
 local currency = {
@@ -53,9 +53,9 @@ end
 
 local function withdraw(nickname)
 	if redstone then
-		redstone.setOutput(sides.north, 13)
+		redstone.setOutput(sides.south, 13)
 		os.sleep(0.4) --подогнать
-		redstone.setOutput(sides.north, 0)
+		redstone.setOutput(sides.south, 0)
 	end
 	db:pay(nickname, -64)
 end
@@ -146,7 +146,7 @@ local function logic3(status, reason, nickname) --заберите железо/
 		local ws = Workspace:new(50,25)
 		ws:text(24, 8, "Заберите железо", 0x222222, 0xeeeeee)
 		ws:draw()
-		while redstone.getInput(sides.west) do
+		while redstone.getInput(sides.east) do
 			os.sleep(0)
 		end
 	else --ошибка
