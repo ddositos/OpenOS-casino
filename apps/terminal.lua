@@ -130,6 +130,7 @@ local function logic3(status, reason, nickname) --заберите железо/
 	if status then --заберите железо
 		local ws = Workspace:new(50,25)
 		ws:text(20, 10, "Заберите железо", 0x222222, 0xeeeeee)
+		ws:draw()
 		while reason == getCurrencyAmount() do
 			os.sleep(0)
 		end
