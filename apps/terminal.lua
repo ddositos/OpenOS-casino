@@ -27,7 +27,7 @@ local currency = {
 
 local function getCurrencyAmount()
 	if me == false then
-		return 0 --virtual machine
+		return 100 --virtual machine
 	end
 	local temp = me.getItemsInNetwork(currency)
 	if temp.n == 0 then
