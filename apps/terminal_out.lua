@@ -100,7 +100,7 @@ local function screen2(nickname)
 		end
 		return nil
 	end)
-	ws:text(34,17,"Снять 64", 0xeeeeee, 0x222222)
+	ws:text(21,17,"Снять 64", 0xeeeeee, 0x222222)
 	ws:bind(3,22, 46, 3, 0xeeeeee, function() 
 		return action.exit
 	end)
