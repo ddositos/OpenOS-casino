@@ -70,6 +70,7 @@ end
 local function drawCurrency()
 	local amount = getCurrencyAmount()
 	local ws = Workspace:new()
+	ws:bind(22,4, 20, 1, 0x222222)
 	ws:text(22,4, tostring(amount) .. " слитков" , 0x222222, 0xeeeeee)
 	ws:draw()
 end
