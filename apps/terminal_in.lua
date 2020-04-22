@@ -17,8 +17,8 @@ local sides = {
 	east = 5
 }
 
-local me = component.me_interface
 
+local me = component.me_interface
 local redstone = component.redstone
 
 local currency = {
@@ -33,32 +33,12 @@ local function getCurrencyAmount()
 	return temp[1].size
 end
 
-local function withdraw(nickname)
 
-	redstone.setOutput(sides.south, 13)
-	os.sleep(0.4) --подогнать
-	redstone.setOutput(sides.south, 0)
-
-	db:pay(nickname, -64)
-end
-
-local function withdraw_wrapper(nickname)
-	local currency = getCurrencyAmount()
-	if currency < 64 then
-		return false, "Недостаточно средств в банке"
-	end
-	if not db:has(nickname, 64) then
-		return false, "У вас недостаточно средств"
-	end
-	withdraw(nickname)
-	return true, currency
-end
 
 
 local action = {
 	exit = 1,
-	deposit = 2,
-	withdraw = 3
+	deposit = 2
 }
 
 local function screen1()
@@ -75,14 +55,17 @@ local function screen2(nickname)
 	ws:bind(1,1,50,25, 0x222222)
 	ws:text(3,2, "Пользователь: " .. nickname, 0x222222, 0xeeeeee)
 	ws:text(3,3, "Баланс: " , 0x222222, 0xeeeeee)
-	ws:text(3,4, "Доступно на вывод: " , 0x222222, 0xeeeeee)
+	ws:text(3,4, "В системе: " , 0x222222, 0xeeeeee)
+	ws:text(3,5, "Пополнение: " , 0x222222, 0xeeeeee)
+	ws:text(3,6, "Комиссия: " , 0x222222, 0xeeeeee)
 	ws:bind(3,14,46,7,0xeeeeee, function(x,y,nickname,user)
 		if nickname == user then
 			return action.withdraw
 		end
 		return nil
 	end)
-	ws:text(21,17,"Снять 64", 0xeeeeee, 0x222222)
+	ws:text(21,17,"Пополнить", 0xeeeeee, 0x222222)
+	ws:text(20,18,"Комиссия 5%", 0xeeeeee, 0x222222)
 	ws:bind(3,22, 46, 3, 0xeeeeee, function() 
 		return action.exit
 	end)
@@ -101,9 +84,15 @@ end
 
 local function drawCurrency()
 	local amount = getCurrencyAmount()
+	local deposit = math.floor(amount * 0.95)
+	local comission = amount - deposit
 	local ws = Workspace:new()
-	ws:bind(22,4, 20, 1, 0x222222)
-	ws:text(22,4, tostring(math.floor(amount)) .. " слитков" , 0x222222, 0xeeeeee)
+	ws:bind(14,4, 30, 1, 0x222222)
+	ws:bind(15,5, 30, 1, 0x222222)
+	ws:bind(13,6, 30, 1, 0x222222)
+	ws:text(14,4, amount .." слитков" , 0x222222, 0xeeeeee)
+	ws:text(15,5, deposit .. " слитков" , 0x222222, 0xeeeeee)
+	ws:text(13,6, comission .. " слитков" , 0x222222, 0xeeeeee)
 	ws:draw()
 end
 
@@ -114,56 +103,29 @@ local function loadingscreen()
 	return ws
 end
 
-local function screenTakeIron()
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222)
-	ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
-	ws:draw()
-end
 
-
-local function logic3(status, reason, nickname) --ошибка
-	if status == false then --ошибка
-		local ws = screenError(reason)
-		ws:draw()
-		while not ws.buttons:pull(nickname) do
-			os.sleep(0)
-		end
-	end
-end
 
 
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
 	local ws_loading = loadingscreen()
-	if redstone.getInput(sides.west) ~= 0 then
-		screenTakeIron()
-		while redstone.getInput(sides.west) ~= 0 do
-			os.sleep(0)
-		end
-	end
 	ws_loading:draw()
 	os.sleep(0)
 	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
+	ws:debug()
 	ws:draw()
 	while 1 do
-		if redstone.getInput(sides.west) ~= 0 then
-			screenTakeIron()
-			while redstone.getInput(sides.west) ~= 0 do
-				os.sleep(0)
-			end
-			ws:draw()
-		end
+
 		drawCurrency()
 		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
 			return true -- logic 1
-		elseif type == action.withdraw then
+		elseif type == action.deposit then
 			ws_loading:draw()
 			os.sleep(0)
-			local status, reason = withdraw_wrapper(nickname)
-			logic3(status, reason, nickname)
+			local status, reason = deposit_wrapper(nickname)
+			--logic3(status, reason, nickname)
 			return false
 		end
 		
