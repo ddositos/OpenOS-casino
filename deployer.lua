@@ -17,7 +17,7 @@ local modules = {
 	"event"
 }
 local apps = {
-	"manager", "casino", "terminal_out", "reinstall"
+	"manager", "casino", "terminal_out","terminal_in", "reinstall"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
