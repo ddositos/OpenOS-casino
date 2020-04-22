@@ -2,7 +2,13 @@ local component = require("component")
 local Workspace = require("dsx_workspace")
 local db = require("dsx_db"):new("pank228") --TODO: убрать
 
-local me = pcall(function() return component.me_interface end)
+local status, value = pcall(function() return component.me_interface end)
+local me
+if status then
+	me = value
+else 
+	me = false
+end
 
 local currency = {
 	name = "minecraft:iron_ingot"
