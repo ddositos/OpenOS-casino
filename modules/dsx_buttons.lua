@@ -29,7 +29,7 @@ function Buttons:new()
 			local button = self.list[i]
 			if  button.x <= x and x < button.x+button.width and
 				button.y <= y and y < button.y+button.height then
-				return button.callback(x,y,nickname,table.unpack(arg))
+				return button.callback(x,y,nickname,...)
 			end
 		end
 		return nil
