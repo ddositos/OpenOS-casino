@@ -1,5 +1,23 @@
+local component = require("component")
 local Workspace = require("dsx_workspace")
 local db = require("dsx_db"):new("pank228") --TODO: убрать
+
+local me = pcall(function() return component.me_interface end)
+
+local currency = {
+	name = "minecraft:iron_ingot"
+}
+
+local function getCurrencyAmount()
+	if me == false then
+		return 0 --virtual machine
+	end
+	local temp = me.getItemsInNetwork(currency)
+	if temp.n == 0 then
+		return 0
+	end
+	return temp[1].size
+end
 
 local action = {
 	exit = 1,
@@ -21,6 +39,7 @@ local function screen2(nickname)
 	ws:bind(1,1,50,25, 0x222222)
 	ws:text(3,2, "Пользователь: " .. nickname, 0x222222, 0xeeeeee)
 	ws:text(3,3, "Баланс: " , 0x222222, 0xeeeeee)
+	ws:text(3,4, "Доступно на вывод: " , 0x222222, 0xeeeeee)
 	ws:bind(3,14,22,7,0xeeeeee, function(x,y,_nickname)
 		if nickname == _nickname then
 			return action.deposit
@@ -42,6 +61,13 @@ local function screen2(nickname)
 	return ws
 end
 
+local function drawCurrency()
+	local amount = getCurrencyAmount()
+	local ws = Workspace:new()
+	ws:text(22,4, tostring(amount) .. " слитков" , 0x222222, 0xeeeeee)
+	ws:draw()
+end
+
 local function loadingscreen()
 	local ws = Workspace:new(50,25)
 	ws:bind(1,1,50,25, 0x222222)
@@ -54,11 +80,11 @@ local function logic2(nickname) --основное меню
 	local ws_loading = loadingscreen()
 	ws_loading:draw()
 	os.sleep(0)
-	--local balance = db:get(nickname)
+	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
-	--ws:debug()
 	ws:draw()
 	while 1 do
+		drawCurrency()
 		local type = ws.buttons:pull()
 		if type == action.exit then
 			return
