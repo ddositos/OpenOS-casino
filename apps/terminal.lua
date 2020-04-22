@@ -2,6 +2,21 @@ local component = require("component")
 local Workspace = require("dsx_workspace")
 local db = require("dsx_db"):new("pank228") --TODO: убрать
 
+local sides = {
+    bottom = 0,
+    top = 1,
+    back = 2,
+    front =3,
+    right = 4,
+	left = 5,
+	down = 0,
+	up = 1,
+	north = 2,
+	south = 3,
+	west = 4,
+	east = 5
+}
+
 local me
 local status, value = pcall(function() return component.me_interface end)
 if status then
