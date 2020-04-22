@@ -118,6 +118,7 @@ local function screenTakeIron()
 	local ws = Workspace:new(50,25)
 	ws:bind(1,1,50,25, 0x222222)
 	ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
+	ws:draw()
 end
 
 
@@ -133,7 +134,7 @@ end
 
 local function checkIron()
 	if redstone.getInput(sides.west) ~= 0 then
-		ws_take_iron:draw()
+		screenTakeIron()
 		while redstone.getInput(sides.west) ~= 0 do
 			os.sleep(0)
 		end
@@ -143,7 +144,6 @@ end
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
 	local ws_loading = loadingscreen()
-	local ws_take_iron = screenTakeIron()
 	ws_loading:draw()
 	os.sleep(0)
 	local balance = db:get(nickname)
