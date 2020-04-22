@@ -140,17 +140,15 @@ local function loadingscreen()
 	return ws
 end
 
+local function screenTakeIron()
+	local ws = Workspace:new(50,25)
+	ws:bind(1,1,50,25, 0x222222)
+	ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
+end
 
-local function logic3(status, reason, nickname) --заберите железо/ошибка
-	if status then --заберите железо
-		local ws = Workspace:new(50,25)
-		ws:bind(1,1,50,25, 0x222222)
-		ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
-		ws:draw()
-		while redstone.getInput(sides.west) ~= 0 do
-			os.sleep(0)
-		end
-	else --ошибка
+
+local function logic3(status, reason, nickname) --ошибка
+	if status == false then --ошибка
 		local ws = screenError(reason)
 		ws:draw()
 		while not ws.buttons:pull(nickname) do
@@ -162,6 +160,13 @@ end
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
 	local ws_loading = loadingscreen()
+	local ws_take_iron = screenTakeIron()
+	if redstone.getInput(sides.west) ~= 0 then
+		ws_take_iron:draw()
+		while redstone.getInput(sides.west) ~= 0 do
+			os.sleep(0)
+		end
+	end
 	ws_loading:draw()
 	os.sleep(0)
 	local balance = db:get(nickname)
