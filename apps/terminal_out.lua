@@ -17,33 +17,15 @@ local sides = {
 	east = 5
 }
 
-local me
-local status, value = pcall(function() return component.me_interface end)
-if status then
-	me = value
-else 
-	me = false
-end
+local me = component.me_interface
 
-local redstone
-local status, value = pcall(function() return component.redstone end)
-if status then
-	redstone = value
-else 
-	redstone = false
-end
-if redstone then
-	redstone.setOutput(sides.south, 0)
-end
+local redstone = component.redstone
 
 local currency = {
 	name = "minecraft:iron_ingot"
 }
 
 local function getCurrencyAmount()
-	if me == false then
-		return 100 --virtual machine
-	end
 	local temp = me.getItemsInNetwork(currency)
 	if temp.n == 0 then
 		return 0
@@ -52,11 +34,11 @@ local function getCurrencyAmount()
 end
 
 local function withdraw(nickname)
-	if redstone then
-		redstone.setOutput(sides.south, 13)
-		os.sleep(0.4) --подогнать
-		redstone.setOutput(sides.south, 0)
-	end
+
+	redstone.setOutput(sides.south, 13)
+	os.sleep(0.4) --подогнать
+	redstone.setOutput(sides.south, 0)
+
 	db:pay(nickname, -64)
 end
 
