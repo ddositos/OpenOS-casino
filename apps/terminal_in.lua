@@ -135,7 +135,8 @@ local function logic2(nickname) --основное меню
 			ws_loading:draw()
 			os.sleep(0)
 			local currency = getCurrencyAmount()
-			db:pay(nickname, currency)
+			io.write(currency)
+			db:pay(nickname, math.floor(currency*0.95))
 			screenWait()
 			waitForTransfer()
 			return false
