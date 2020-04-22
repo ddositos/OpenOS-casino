@@ -19,7 +19,7 @@ function Buttons:new()
 		return
 	end
 
-	function obj:pull()
+	function obj:pull(...)
 		local _,_,x,y,_,nickname = event.pull("touch")
 		--only for virtual machine
 		if nickname == nil then
@@ -29,7 +29,7 @@ function Buttons:new()
 			local button = self.list[i]
 			if  button.x <= x and x < button.x+button.width and
 				button.y <= y and y < button.y+button.height then
-				return button.callback(x,y,nickname)
+				return button.callback(x,y,nickname,table.unpack(arg))
 			end
 		end
 		return nil

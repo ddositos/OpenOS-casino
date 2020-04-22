@@ -54,8 +54,8 @@ local function screen2(nickname)
 	end)
 	ws:text(9,17,"Пополнить", 0xeeeeee, 0x222222)
 	ws:bind(27,14,22,7,0xeeeeee)
-	ws:text(35,17,"Снять", 0xeeeeee, 0x222222, function(x,y,_nickname)
-		if nickname == _nickname then
+	ws:text(35,17,"Снять", 0xeeeeee, 0x222222, function(x,y,nickname, user)
+		if nickname == user then
 			return action.withdraw
 		end
 		return nil
