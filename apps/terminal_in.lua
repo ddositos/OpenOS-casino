@@ -20,6 +20,7 @@ local sides = {
 
 local me = component.me_interface
 local redstone = component.redstone
+redstone.setOutput(sides.north, 0)
 
 local currency = {
 	name = "minecraft:iron_ingot"
@@ -32,8 +33,6 @@ local function getCurrencyAmount()
 	end
 	return temp[1].size
 end
-
-
 
 
 local action = {
@@ -60,7 +59,7 @@ local function screen2(nickname)
 	ws:text(3,6, "Комиссия: " , 0x222222, 0xeeeeee)
 	ws:bind(3,14,46,7,0xeeeeee, function(x,y,nickname,user)
 		if nickname == user then
-			return action.withdraw
+			return action.deposit
 		end
 		return nil
 	end)
@@ -83,16 +82,16 @@ local function screenError(reason)
 end
 
 local function drawCurrency()
-	local amount = getCurrencyAmount()
+	local amount = math.floor(getCurrencyAmount())
 	local deposit = math.floor(amount * 0.95)
 	local comission = amount - deposit
 	local ws = Workspace:new()
 	ws:bind(14,4, 30, 1, 0x222222)
 	ws:bind(15,5, 30, 1, 0x222222)
 	ws:bind(13,6, 30, 1, 0x222222)
-	ws:text(14,4, amount .." слитков" , 0x222222, 0xeeeeee)
-	ws:text(15,5, deposit .. " слитков" , 0x222222, 0xeeeeee)
-	ws:text(13,6, comission .. " слитков" , 0x222222, 0xeeeeee)
+	ws:text(14,4, amount .." коинов" , 0x222222, 0xeeeeee)
+	ws:text(15,5, deposit .. " коинов" , 0x222222, 0xeeeeee)
+	ws:text(13,6, comission .. " коинов" , 0x222222, 0xeeeeee)
 	ws:draw()
 end
 
@@ -103,8 +102,19 @@ local function loadingscreen()
 	return ws
 end
 
+local function waitForTransfer()
+	redstone.setOutput(sides.north, 13)
+	while getCurrencyAmount() ~= 0 do
+		os.sleep(0)
+	end
+	redstone.setOutput(sides.north, 0)
+end
 
-
+local function screenWait()
+	local ws = Workspace:new()
+	ws:bind(1,1,50,25, 0x222222)
+	ws:text(16, 12, "Загрузка валюты...", 0x222222, 0xeeeeee)
+end
 
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
@@ -113,7 +123,6 @@ local function logic2(nickname) --основное меню
 	os.sleep(0)
 	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
-	ws:debug()
 	ws:draw()
 	while 1 do
 
@@ -124,8 +133,10 @@ local function logic2(nickname) --основное меню
 		elseif type == action.deposit then
 			ws_loading:draw()
 			os.sleep(0)
-			local status, reason = deposit_wrapper(nickname)
-			--logic3(status, reason, nickname)
+			local currency = getCurrencyAmount()
+			db:pay(nickname, currency)
+			screenWait()
+			waitForTransfer()
 			return false
 		end
 		
