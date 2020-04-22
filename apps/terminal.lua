@@ -54,7 +54,7 @@ local function withdraw_wrapper(nickname)
 		return false, "У вас недостаточно средств"
 	end
 	withdraw()
-	return currency
+	return true, currency
 end
 
 
