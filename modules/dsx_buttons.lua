@@ -20,7 +20,10 @@ function Buttons:new()
 	end
 
 	function obj:pull(...)
-		local _,_,x,y,_,nickname = event.pull("touch")
+		local status,_,x,y,_,nickname = event.pull(0,"touch")
+		if status == nil then
+			return nil
+		end
 		--only for virtual machine
 		if nickname == nil then
 			nickname = "doritosxxx"
