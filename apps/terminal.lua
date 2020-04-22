@@ -68,7 +68,7 @@ local function withdraw_wrapper(nickname)
 	if not db:has(nickname, 64) then
 		return false, "У вас недостаточно средств"
 	end
-	withdraw()
+	withdraw(nickname)
 	return true, currency
 end
 
@@ -121,7 +121,7 @@ local function screenError(reason)
 	ws:bind(1,1,50,25, 0x222222, function(x,y,nickname, user)
 		return nickname == user
 	end)
-	ws:text(20, 12, reason, 0x222222, 0xeeeeee)
+	ws:text(17, 12, reason, 0x222222, 0xeeeeee)
 	return ws
 end
 
