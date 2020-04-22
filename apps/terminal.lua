@@ -162,6 +162,7 @@ local function logic2(nickname) --основное меню
 		elseif type == action.deposit then
 			--TODO
 		end
+		ws:draw()
 	end
 end
 
