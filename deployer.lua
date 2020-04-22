@@ -12,10 +12,12 @@ local CONFIG = {
 }
 
 local modules = {
-	"area", "buttons", "constants", "db", "exception", "polygon", "text", "workspace"
+	"dsx_area", "dsx_buttons", "dsx_constants", "dsx_db",
+	"dsx_exception", "dsx_polygon", "dsx_text", "dsx_workspace",
+	"event"
 }
 local apps = {
-	"manager", "fullscreen", "casino"
+	"manager", "casino", "terminal"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
@@ -33,7 +35,7 @@ local function load_modules()
 		local module = modules[i]
 		print("Загрузка модуля " .. module)
 		shell.execute(string.format(
-			"wget -fq %s/modules/dsx_%s.lua /lib/dsx_%s.lua",
+			"wget -fq %s/modules/%s.lua /lib/%s.lua",
 			github,
 			module,
 			module

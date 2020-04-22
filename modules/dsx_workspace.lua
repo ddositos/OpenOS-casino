@@ -42,6 +42,22 @@ function Workspace:new(width, height)
 			element:draw()
 		end
 	end
+
+	function obj:debug()
+		self.buttons:register(Area:new(
+			1, 
+			1,
+			self.width,
+			self.height
+		),
+		function(x,y)
+			local colorB, modeB = gpu.setBackground(0x000000)
+			local colorF, modeF = gpu.setForeground(0xffffff)
+			gpu.set(x,y,x .. " " .. y)
+			gpu.setBackground(colorB, modeB)
+			gpu.setForeground(colorF, modeF)
+		end)
+	end
 	
 
 

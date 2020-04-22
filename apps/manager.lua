@@ -1,7 +1,16 @@
-local internet = require("dsx_request")
 local db = require("dsx_db"):new("pank228")
 local com = require("component")
 local gpu = com.gpu
+local term = require("term")
+local Workspace = require("dsx_workspace")
+
+local function clear()
+	local ws = Workspace:new(160,50)
+	ws:bind(1,1,160,50, 0x222222)
+	ws:draw()
+end
+
+clear()
 
 local comands = {}
 

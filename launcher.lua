@@ -5,20 +5,30 @@ local ExceptionHandler = require("dsx_exception")
 
 local apps = {}
 local apps_assoc = {}
-local i = 1;
 
 term.clear()
 io.write("Доступные приложения:\n")
 for file in fs.list('/home/apps') do
-	table.insert(apps, file)
-	local assoc = file:gsub(".lua", "")
-	apps_assoc[assoc] = i
+	local name = file:gsub(".lua", "")
+	table.insert(apps, name)
+end
+
+table.sort(apps)
+
+local i = 1
+for j, name in pairs(apps) do
+	apps_assoc[name] = j
 	local color, mode = gpu.setForeground(0x00ff00)
 	io.write(string.format(" [%i] ", i))
 	gpu.setForeground(color, mode)
-	io.write(assoc .. "\n")
-	i = i+1 
+	io.write(name .. "\n")
+	i = i+1
 end
+
+local color, mode = gpu.setForeground(0x00ff00)
+io.write(string.format(" [%i] ", i))
+gpu.setForeground(color, mode)
+io.write("Перейти в терминал\n")
 
 local id = 0
 while 1 do
@@ -29,18 +39,20 @@ while 1 do
 		break
 	end
 	id = tonumber(id)
-	if id ~= nil and 1 <= id and id <= #apps then
+	if id ~= nil and 1 <= id and id <= 1+#apps then
 		break
 	end
-	io.write(string.format("Приложение не найдено. Введите число от 1 до %i или название приложения\n", #apps))
+	io.write(string.format("Приложение не найдено. Введите число от 1 до %i или название приложения\n", 1+#apps))
 end
 
---io.write(string.format("Выбрано приложение %s.\nНажмите enter для запуска.", apps[id]:gsub(".lua", "")))
---io.read()
+if id == 1+#apps then
+	return 
+end
 
-local path = "/home/apps/" .. apps[id]
+local path = "/home/apps/" .. apps[id] .. ".lua"
 
 local app = ExceptionHandler:new(loadfile(path))
 while 1 do
 	app:run()
+	os.sleep(0)
 end
