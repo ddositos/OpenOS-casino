@@ -144,9 +144,10 @@ end
 local function logic3(status, reason, nickname) --заберите железо/ошибка
 	if status then --заберите железо
 		local ws = Workspace:new(50,25)
-		ws:text(24, 8, "Заберите железо", 0x222222, 0xeeeeee)
+		ws:bind(1,1,50,25, 0x222222)
+		ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
 		ws:draw()
-		while redstone.getInput(sides.east) do
+		while not redstone.getInput(sides.east) do
 			os.sleep(0)
 		end
 	else --ошибка
