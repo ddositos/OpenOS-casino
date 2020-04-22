@@ -54,6 +54,7 @@ local function withdraw_wrapper(nickname)
 		return false, "У вас недостаточно средств"
 	end
 	withdraw()
+	return currency
 end
 
 
@@ -100,6 +101,15 @@ local function screen2(nickname)
 	return ws
 end
 
+local function screenError(reason)
+	local ws = Workspace:new(50,25)
+	ws:bind(1,1,50,25, 0x222222, function(x,y,nickname, user)
+		return nickname == user
+	end)
+	ws:text(20, 12, reason, 0x222222, 0xeeeeee)
+	return ws
+end
+
 local function drawCurrency()
 	local amount = getCurrencyAmount()
 	local ws = Workspace:new()
@@ -113,6 +123,23 @@ local function loadingscreen()
 	ws:bind(1,1,50,25, 0x222222)
 	ws:text(20, 12, "Загрузка...", 0x222222, 0xeeeeee)
 	return ws
+end
+
+
+local function logic3(status, reason, nickname) --заберите железо/ошибка
+	if status then --заберите железо
+		local ws = Workspace:new(50,25)
+		ws:text(20, 10, "Заберите железо", 0x222222, 0xeeeeee)
+		while reason == getCurrencyAmount() do
+			os.sleep(0)
+		end
+	else --ошибка
+		local ws = screenError(reason)
+		ws:draw()
+		while ws.buttons:pull(nickname) do
+			os.sleep(0)
+		end
+	end
 end
 
 local function logic2(nickname) --основное меню
@@ -131,7 +158,7 @@ local function logic2(nickname) --основное меню
 		elseif type == action.withdraw then
 			ws_loading:draw()
 			local status, reason = withdraw_wrapper(nickname)
-			ws:draw()
+			logic3(status, reason, nickname)
 		elseif type == action.deposit then
 			--TODO
 		end
