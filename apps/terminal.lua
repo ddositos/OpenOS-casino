@@ -157,22 +157,26 @@ local function logic3(status, reason, nickname) --ошибка
 	end
 end
 
-local function logic2(nickname) --основное меню
-	local ws = screen2(nickname)
-	local ws_loading = loadingscreen()
-	local ws_take_iron = screenTakeIron()
+local function checkIron()
 	if redstone.getInput(sides.west) ~= 0 then
 		ws_take_iron:draw()
 		while redstone.getInput(sides.west) ~= 0 do
 			os.sleep(0)
 		end
 	end
+end
+
+local function logic2(nickname) --основное меню
+	local ws = screen2(nickname)
+	local ws_loading = loadingscreen()
+	local ws_take_iron = screenTakeIron()
 	ws_loading:draw()
 	os.sleep(0)
 	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
 	ws:draw()
 	while 1 do
+		checkIron()
 		drawCurrency()
 		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
