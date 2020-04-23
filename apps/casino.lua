@@ -35,6 +35,7 @@ local wheel = {32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20
 local order = {3,6,9,12,15,18,21,24,27,30,33,36,2,5,8,11,14,17,20,23,26,29,32,35,1,4,7,10,13,16,19,22,25,28,31,34}
 
 local function label(id)
+	id = math.floor( id )
 	if id == 0 then
 		return "§a0§e"
 	end
@@ -301,7 +302,7 @@ local function loop()
 	while firstBet == 0 or os.time() - firstBet < 750 do
 		ws.buttons:pull()
 	end
-	say("Ставки приняты. Общая сумма ставок " .. sum .. "коинов")
+	say("Ставки приняты. Общая сумма ставок " .. sum .. " коинов")
 	os.sleep(2)
 	say("Рулетка крутится...")
 	local number = roll()
