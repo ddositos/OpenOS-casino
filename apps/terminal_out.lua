@@ -35,9 +35,9 @@ end
 
 local function withdraw(nickname)
 
-	redstone.setOutput(sides.south, 13)
+	redstone.setOutput(sides.north, 13)
 	os.sleep(0.4) --подогнать
-	redstone.setOutput(sides.south, 0)
+	redstone.setOutput(sides.north, 0)
 
 	db:pay(nickname, -64)
 end
@@ -136,9 +136,9 @@ end
 local function logic2(nickname) --основное меню
 	local ws = screen2(nickname)
 	local ws_loading = loadingscreen()
-	if redstone.getInput(sides.west) ~= 0 then
+	if redstone.getInput(sides.east) ~= 0 then
 		screenTakeIron()
-		while redstone.getInput(sides.west) ~= 0 do
+		while redstone.getInput(sides.east) ~= 0 do
 			os.sleep(0)
 		end
 	end
@@ -148,9 +148,9 @@ local function logic2(nickname) --основное меню
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
 	ws:draw()
 	while 1 do
-		if redstone.getInput(sides.west) ~= 0 then
+		if redstone.getInput(sides.east) ~= 0 then
 			screenTakeIron()
-			while redstone.getInput(sides.west) ~= 0 do
+			while redstone.getInput(sides.east) ~= 0 do
 				os.sleep(0)
 			end
 			ws:draw()
