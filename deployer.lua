@@ -14,10 +14,10 @@ local CONFIG = {
 local modules = {
 	"dsx_buttons", "dsx_constants", "dsx_db",
 	"dsx_exception", "dsx_polygon", "dsx_text", "dsx_workspace",
-	"event"
+	"event", "dsx_workspace2", "dsx_element"
 }
 local apps = {
-	"manager", "casino", "terminal_out","terminal_in", "reinstall", "terminal_check"
+	"manager", "casino", "terminal_out","terminal_in", "reinstall", "terminal_check", "top"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
