@@ -29,5 +29,5 @@ while true do
 	end
 	ws2:draw()
 
-	os.sleep(120)
+	os.sleep(300)
 end
