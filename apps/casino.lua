@@ -73,6 +73,7 @@ local loading = {
 
 local bets = {}
 local winners = {}
+local outOfCoins
 local firstBet
 local sum
 
@@ -82,7 +83,10 @@ local function bet(nickname, button_id, value)
 	loading.start()
 	os.sleep(0)
 	if not db:has(nickname, value) then
-		say( "У " .. nickname .." недостаточно коинов. Пополните баланс в терминале")
+		if outOfCoins.nickname == nil then
+			say( "У " .. nickname .. " недостаточно коинов. Пополните баланс в терминале")
+			outOfCoins.nickname = true
+		end
 		loading.finish()
 		return
 	end
@@ -300,6 +304,7 @@ local function loop()
 		bets[i] = {} --pair(nickname, amount)
 	end
 	winners = {}
+	outOfCoins = {}
 	firstBet = 0
 	sum = 0
 	while firstBet == 0 or os.time() - firstBet < 1000 do
