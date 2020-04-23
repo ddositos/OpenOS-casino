@@ -43,9 +43,9 @@ local function label(id)
 		return (colors[id] == 'r' and "§c" or "§0") .. id .. "§e"
 	end
 	return ({
-	[37] = "2к1",
-	[38] = "2к1",
-	[39] = "2к1",
+	[37] = "1 ряд",
+	[38] = "2 ряд",
+	[39] = "3 ряд",
 	[40] = "первая 12",
 	[41] = "вторая 12" ,
 	[42] = "третья 12",
@@ -243,15 +243,15 @@ local function render()
 	ws1:bind(96, 3, 8, 3, 0x009900, function(_,_,nickname, button)
 		return bet(nickname, 37, button == mouse.left and 3 or 10)
 	end)
-	ws1:text(98, 4, "2 к 1", 0x009900, 0xffffff)
+	ws1:text(98, 4, "1 ряд", 0x009900, 0xffffff)
 	ws1:bind(96, 7, 8, 3, 0x009900, function(_,_,nickname, button)
 		return bet(nickname, 38, button == mouse.left and 3 or 10)
 	end)
-	ws1:text(98, 8, "2 к 1", 0x009900, 0xffffff)
+	ws1:text(98, 8, "2 ряд", 0x009900, 0xffffff)
 	ws1:bind(96, 11, 8, 3, 0x009900, function(_,_,nickname, button)
 		return bet(nickname, 39, button == mouse.left and 3 or 10)
 	end)
-	ws1:text(98, 12, "2 к 1", 0x009900, 0xffffff)
+	ws1:text(98, 12, "3 ряд", 0x009900, 0xffffff)
 
 	for j=0,35 do
 		local i = order[j+1]
@@ -303,7 +303,7 @@ local function loop()
 	winners = {}
 	firstBet = 0
 	sum = 0
-	while firstBet == 0 or os.time() - firstBet < 900 do
+	while firstBet == 0 or os.time() - firstBet < 1000 do
 		ws.buttons:pull()
 	end
 	say("Ставки приняты. Общая сумма ставок " .. sum .. " коинов")
