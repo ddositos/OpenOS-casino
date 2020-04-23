@@ -126,7 +126,11 @@ local function logic3(status, reason, nickname) --ошибка
 	if status == false then --ошибка
 		local ws = screenError(reason)
 		ws:draw()
+		local time = os.time()
 		while not ws.buttons:pull(nickname) do
+			if os.time() - time > 750 then
+				break
+			end
 			os.sleep(0)
 		end
 	end
@@ -147,7 +151,11 @@ local function logic2(nickname) --основное меню
 	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
 	ws:draw()
+	local time = os.time()
 	while 1 do
+		if os.time() - time > 750 then
+			return true
+		end
 		if redstone.getInput(sides.east) ~= 0 then
 			screenTakeIron()
 			while redstone.getInput(sides.east) ~= 0 do
