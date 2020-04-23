@@ -38,8 +38,11 @@ local function logic2(nickname) --основное меню
 	local balance = db:get(nickname)
 	local ws = screen2(nickname, balance)
 	ws:draw()
+	local time = os.time()
 	while not ws.buttons:pull() do
-		
+		if os.time() - time  > 800 then
+			break;
+		end
 	end
 end
 
