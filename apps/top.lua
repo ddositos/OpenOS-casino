@@ -3,7 +3,7 @@ local Element = require("dsx_element")
 local db = require("dsx_db"):new("pank228") --TODO: убрать
 
 
-local WIDTH = 42
+local WIDTH = 46
 local HEIGHT = 7
 local ws = Workspace:new(WIDTH,HEIGHT)
 
