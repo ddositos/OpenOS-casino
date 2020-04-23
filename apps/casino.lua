@@ -1,5 +1,4 @@
 local component = require("component")
-local internet = require("internet")
 local Workspace = require("dsx_workspace")
 
 local db = require("dsx_db"):new("pank228")
@@ -83,7 +82,7 @@ local function bet(nickname, button_id, value)
 	loading.start()
 	os.sleep(0)
 	if not db:has(nickname, value) then
-		say("Недостаточно коинов. Пополните баланс в терминале")
+		say( "У " .. nickname .." недостаточно коинов. Пополните баланс в терминале")
 		loading.finish()
 		return
 	end
