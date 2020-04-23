@@ -125,8 +125,11 @@ local function logic2(nickname) --основное меню
 	local balance = db:get(nickname)
 	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
 	ws:draw()
+	local time = os.time()
 	while 1 do
-
+		if os.time() - time > 750 then
+			return true
+		end
 		drawCurrency()
 		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
