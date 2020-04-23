@@ -20,7 +20,7 @@ function Buttons:new()
 	end
 
 	function obj:pull(...)
-		local status,_,x,y,_,nickname = event.pull(0,"touch")
+		local status,_,x,y,_btn,nickname = event.pull(0,"touch")
 		if status == nil then
 			return nil
 		end
@@ -32,7 +32,7 @@ function Buttons:new()
 			local button = self.list[i]
 			if  button.x <= x and x < button.x+button.width and
 				button.y <= y and y < button.y+button.height then
-				return button.callback(x,y,nickname,...)
+				return button.callback(x,y,nickname,_btn,...)
 			end
 		end
 		return nil

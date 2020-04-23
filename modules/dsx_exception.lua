@@ -13,7 +13,7 @@ function Handler:new(app)
 		reason = tostring(reason)
 		local ws = Workspace:new(160, 50)
 		ws:bind(1,1,160,50, 0x222222)
-		ws:text(77, 5, "пиздец", 0x222222, 0xffffff)
+		ws:text(70, 5, "Лучше позовите админа", 0x222222, 0xffffff)
 		ws:bind(1, 44, 160, 7, 0xeeeeee, function(x,y,nickname)
 			for _, admin in pairs(constants.admins) do
 				if nickname == admin then
@@ -27,7 +27,7 @@ function Handler:new(app)
 		
 		gpu.setBackground(0x222222)
 		gpu.setForeground(0xffffff)
-		term.setCursor(3,7)
+		term.setCursor(3,8)
 		term.write(reason, true)
 
 		while not ws.buttons:pull() do

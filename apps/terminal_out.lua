@@ -76,7 +76,7 @@ local function screen2(nickname)
 	ws:text(3,2, "Пользователь: " .. nickname, 0x222222, 0xeeeeee)
 	ws:text(3,3, "Баланс: " , 0x222222, 0xeeeeee)
 	ws:text(3,4, "Доступно на вывод: " , 0x222222, 0xeeeeee)
-	ws:bind(3,14,46,7,0xeeeeee, function(x,y,nickname,user)
+	ws:bind(3,14,46,7,0xeeeeee, function( _, _, nickname, _, user )
 		if nickname == user then
 			return action.withdraw
 		end
@@ -92,7 +92,7 @@ end
 
 local function screenError(reason)
 	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222, function(x,y,nickname, user)
+	ws:bind(1,1,50,25, 0x222222, function( _, _, nickname, _, user )
 		return true
 	end)
 	ws:text(13, 12, reason, 0x222222, 0xeeeeee)
