@@ -80,25 +80,29 @@ local sum
 local gpu = require("component").gpu
 
 local function bet(nickname, button_id, value)
+	loading.start()
+	os.sleep(0)
+	if not db:has(nickname, value) then
+		say("Недостаточно коинов. Пополните баланс в терминале")
+		loading.finish()
+		return
+	end
+	
+	db:pay(nickname, -value)
+	if bets[button_id][nickname] ~= nil then
+		bets[button_id][nickname]  = bets[button_id][nickname] + value
+	else 
+		bets[button_id][nickname] = value
+	end
+	sum = sum + value
+	say( nickname .. " поставил " .. value .. " на " .. label(button_id))
+	
+	os.sleep(0.4)
 	if firstBet == 0 then
 		firstBet = os.time()
 		say("Ставки закроются через 15 секунд")
 	end
-	loading.start()
-	os.sleep(0)
-	if not db:has(nickname, value) then
-		say("Недостаточно коинов. Пополните баланс в терминале") 
-	else 
-		db:pay(nickname, -value)
-		if bets[button_id][nickname] ~= nil then
-			bets[button_id][nickname]  = bets[button_id][nickname] + value
-		else 
-			bets[button_id][nickname] = value
-		end
-		sum = sum + value
-		say( nickname .. " поставил " .. value .. " на " .. label(button_id))
-	end
-	loading.finish()
+	
 end
 
 local function addWinner(nickname, amount)
@@ -299,7 +303,7 @@ local function loop()
 	winners = {}
 	firstBet = 0
 	sum = 0
-	while firstBet == 0 or os.time() - firstBet < 750 do
+	while firstBet == 0 or os.time() - firstBet < 900 do
 		ws.buttons:pull()
 	end
 	say("Ставки приняты. Общая сумма ставок " .. sum .. " коинов")
