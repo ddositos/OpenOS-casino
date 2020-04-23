@@ -11,7 +11,7 @@ local mouse = {
 local chat = component.chat_box
 
 chat.setName("§5Рулетка§7§o")
-chat.setDistance(5)
+chat.setDistance(7)
 
 
 local gpu = component.gpu
@@ -101,7 +101,7 @@ local function bet(nickname, button_id, value)
 		firstBet = os.time()
 		say("Ставки закроются через 15 секунд")
 	end
-	
+	loading.finish()
 end
 
 local function addWinner(nickname, amount)
