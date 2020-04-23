@@ -123,7 +123,7 @@ local function withdraw(number)
 			end
 		end
 
-		if color[number] == 'r' then --красное
+		if colors[number] == 'r' then --красное
 			for nickname, _bet in pairs(bets[47]) do
 				addWinner(nickname, _bet*2)
 			end
