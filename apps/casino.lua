@@ -9,11 +9,11 @@ local mouse = {
 	right = 1
 }
 
-local chat = false--component.chat_box
---[[
+local chat = component.chat_box
+
 chat.setName("§5Рулетка§7§o")
 chat.setDistance(5)
-]]--
+
 
 local gpu = component.gpu
 local function say(str)
