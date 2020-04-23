@@ -133,7 +133,7 @@ local function logic2(nickname) --основное меню
 			return true -- logic 1
 		elseif type == action.deposit then
 			local currency = getCurrencyAmount()
-			if currency != 0 then
+			if currency ~= 0 then
 				ws_loading:draw()
 				os.sleep(0)
 				db:pay(nickname, math.floor(currency*0.95))
