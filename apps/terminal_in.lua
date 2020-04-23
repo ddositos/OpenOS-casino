@@ -6,7 +6,7 @@ local sides = {
     bottom = 0,
     top = 1,
     back = 2,
-    front =3,
+    front = 3,
     right = 4,
 	left = 5,
 	down = 0,
@@ -132,13 +132,15 @@ local function logic2(nickname) --основное меню
 		if type == action.exit then
 			return true -- logic 1
 		elseif type == action.deposit then
-			ws_loading:draw()
-			os.sleep(0)
 			local currency = getCurrencyAmount()
-			db:pay(nickname, math.floor(currency*0.95))
-			screenWait()
-			waitForTransfer()
-			return false
+			if currency != 0 then
+				ws_loading:draw()
+				os.sleep(0)
+				db:pay(nickname, math.floor(currency*0.95))
+				screenWait()
+				waitForTransfer()
+				return false
+			end
 		end
 		
 	end
