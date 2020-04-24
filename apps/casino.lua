@@ -376,7 +376,7 @@ local function loop()
 	firstBet = 0
 	sum = 0
 	while firstBet == 0 or os.time() - firstBet < 1000 do
-		ws.buttons:pull()
+		ws_main.buttons:pull()
 	end
 	say("Ставки приняты. Общая сумма ставок " .. sum .. " коинов")
 	os.sleep(2)
