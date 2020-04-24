@@ -1,5 +1,6 @@
 local component = require("component")
 local Workspace = require("dsx_workspace")
+local gpu = require("component").gpu
 
 local db = require("dsx_db"):new("pank228")
 
@@ -13,8 +14,6 @@ local chat = component.chat_box
 chat.setName("§5Рулетка§7§o")
 chat.setDistance(7)
 
-
-local gpu = component.gpu
 local function say(str)
 	str = "§e" .. str
 	if not chat then
@@ -30,8 +29,20 @@ local HEIGHT = 23
 
 local colors = {'r','b','r','b','r','b','r','b','r','b','b','r','b','r','b','r','b','r','r','b','r','b','r','b','r','b','r','b','b','r','b','r','b','r','b','r'}
 colors[0] = 'g'
-local wheel = {32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25,17}
+local wheel = {34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25,17}
+local wheel_index = {29,15,35,27,33,11,2,23,8,19,10,6,25,4,17,31,13,37,21,32,16,34,20,9,12,36,28,3,24,22,7,18,30,14,1,26,5}
 local order = {3,6,9,12,15,18,21,24,27,30,33,36,2,5,8,11,14,17,20,23,26,29,32,35,1,4,7,10,13,16,19,22,25,28,31,34}
+
+local function get_color(num)
+	local color = colors[num]
+	if color == 'g' then
+		return 0x00ee00
+	elseif color == 'r' then
+		return 0xdd0000
+	else
+		return 0x000000
+	end
+end
 
 local function label(id)
 	id = math.floor( id )
@@ -76,6 +87,9 @@ local winners = {}
 local outOfCoins
 local firstBet
 local sum
+local tile_pixel = 4
+
+local current_pos = math.random( 1, #wheel );
 
 local gpu = require("component").gpu
 
@@ -276,8 +290,6 @@ end
 local ws = render()
 ws:draw()
 
-
-
 --[[
 	0-36 цифры
 	37 2к1 верхний ряд
@@ -294,9 +306,67 @@ ws:draw()
 	48 черное
 ]]--
 
+local function tick()
+	gpu.copy(2,9,106,7,-1,0)
+	if tile_pixel <= 7 then
+		local index = (current_pos + 5) % #wheel + 1
+		local color = get_color( wheel[index] )
+		gpu.setBackground(color)
+		gpu.fill(107, 10, 1, 5, ' ')
+		if tile_pixel == 4 then
+			gpu.set( 107, 12, tostring( wheel[index]))
+		end
+		if tile_pixel == 5 and wheel[index]/10 >=1 then
+			gpu.set( 107, 12, tostring( wheel[index] %10))
+		end
+	else
+		gpu.setBackground(0xeeeeee)
+		gpu.fill(107, 9, 1, 7, ' ')
+	end
+	tile_pixel = tile_pixel + 1
+	if tile_pixel == 10 then
+		tile_pixel = 1
+		current_pos = current_pos % #wheel + 1
+	end
+end
+
 local function roll()
-	local number = math.random( 0, 36 )
-	return number
+	local rolled = math.random( 0, 36 )
+	
+
+	ws = Workspace:new(107, 23)
+	ws:bind( 1, 1, 107, 23, 0x005500 )
+	ws:bind( 1, 9, 107, 7, 0xeeeeee )
+	ws:bind( 54, 2, 1, 6, 0x8b4513 )
+	ws:bind( 54, 17, 1, 6, 0x8b4513 )
+
+	for i = -6, 6 do
+		local index = (current_pos + i + #wheel - 1) % #wheel + 1
+		local num = wheel[index]
+		local color = get_color(num)
+		
+		ws:bind( 51 + i*9, 10, 7, 5, color )
+		ws:text( 54 + i*9, 12, tostring(num), color, 0xeeeeee )
+	end
+
+	local diff = wheel_index[rolled+1] - current_pos + #wheel
+	if diff < #wheel then
+		diff = diff + #wheel
+	end
+	
+	ws:draw()
+
+	local iterations = diff*9
+	local delayStart = 0.01
+	local delayEnd = 0.08
+	local delta = (delayEnd - delayStart)/iterations
+	for i = 1,iterations do
+		tick()
+		os.sleep(delayStart)
+		delayStart  = delayStart + delta
+	end
+	current_pos = wheel_index[rolled+1]
+	return rolled
 end
 
 local function loop()
