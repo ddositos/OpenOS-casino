@@ -382,8 +382,9 @@ local function loop()
 	os.sleep(2)
 	say("Рулетка крутится...")
 	local number = roll()
-	os.sleep(4)
 	say("Выпало число " .. label(number))
+	os.sleep(4)
+	
 
 	withdraw(number)
 
