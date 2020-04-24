@@ -287,8 +287,8 @@ local function render()
 	end
 	return ws1
 end
-local ws = render()
-ws:draw()
+local ws_main = render()
+ws_main:draw()
 
 --[[
 	0-36 цифры
@@ -350,9 +350,6 @@ local function roll()
 	end
 
 	local diff = wheel_index[rolled+1] - current_pos + #wheel
-	if diff < #wheel then
-		diff = diff + #wheel
-	end
 	
 	ws:draw()
 
@@ -370,6 +367,7 @@ local function roll()
 end
 
 local function loop()
+	ws_main:draw()
 	for i=0, 48 do
 		bets[i] = {} --pair(nickname, amount)
 	end
