@@ -383,10 +383,11 @@ local function loop()
 	say("Рулетка крутится...")
 	local number = roll()
 	say("Выпало число " .. label(number))
+	withdraw(number)
 	os.sleep(4)
 	
 
-	withdraw(number)
+	
 
 	loading.start()
 	for nickname, value in pairs(winners) do
