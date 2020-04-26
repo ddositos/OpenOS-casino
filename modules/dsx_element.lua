@@ -8,18 +8,11 @@ local Element = {
 	ALIGN_END = -4,
 	TRANSPARENT = -5
 }
---[[ TODO
-local OBJECT = {
-	properties = {}
-}
-function OBJECT:set( key, newvalue )
 
-end
-
-]]--
 
 local Block = {}
 function Block:new( x, y, width, height, background, callback )
+	-- assuming x and y are offsetx and offsety
 	local obj = {
 		x = x,
 		y = y,
@@ -28,66 +21,112 @@ function Block:new( x, y, width, height, background, callback )
 		background = background,
 		callback = callback,
 		elements = {},
-		computed = {}
+		computed = {},
+		computers = {}
 	}
+
+	function obj:add(element)
+		element.parent = self
+		table.insert(self.elements, element)
+		if self.root ~= nil then
+			element:connect()
+		end
+		return self
+	end
+	
+	
+	function obj:connect()
+		self.root = self.parent.root
+		self.parent = self.parent.computed
+		self:compute()
+	
+		for _, element in ipairs(self.elements) do
+			element.parent = self
+			element:connect()
+		end
+	end
+
+	function obj:set( key, newvalue )
+		self[key] = newvalue
+		self.computers[key]( self )
+	end
 
 	function obj:compute()
 		local computed = self.computed
-		self.root = self.parent.root
-		self.parent = self.parent.computed
-		local parent = self.parent
+		local computers = self.computers
 
-		
-
-		if self.width == Element.INHERIT then
-			computed.width = parent.width
-		else 
-			computed.width = self.width
-		end
-		if self.height == Element.INHERIT then
-			computed.height = parent.height
-		else 
-			computed.height = self.height
-		end
-		
-		if self.background == Element.INHERIT or self.background == Element.TRANSPARENT then
-			computed.background = parent.background
-		else 
-			computed.background = self.background
+		for property, _function in ipairs(computers) do
+			_function( self )
+			io.write(property, " ")
 		end
 
-		--horizontal alignment
-		if self.x == Element.ALIGN_START or self.width == Element.INHERIT then
-			computed.x = parent.x
-		elseif self.x == Element.ALIGN_CENTER then
-			computed.x = parent.x + math.floor((parent.width - computed.width + 1)/2)
-		elseif self.x == Element.ALIGN_END then
-			computed.x = parent.x + parent.width - computed.width
-		else 
-			computed.x = self.x
-		end
-
-		--vertical alignment
-		if self.y == Element.ALIGN_START or self.height == Element.INHERIT then
-			computed.y = parent.y
-		elseif self.y == Element.ALIGN_CENTER then
-			computed.y = parent.y + math.floor((parent.height - computed.height + 1)/2)
-		elseif self.y == Element.ALIGN_END then
-			computed.y = parent.y + parent.height - computed.height
-		else 
-			computed.y = self.y
-		end
-
+		--TODO: что-то сделать с колбэками
 		if self.callback ~= nil and computed.x ~= nil and computed.y ~= nil and
 			computed.width ~= nil and computed.height ~= nil then
 			self.root.buttons:register(computed.x, computed.y, computed.width, computed.height, self.callback)
 		end
-
-		for _, element in ipairs(self.elements) do
-			element.parent = self
-			element:compute()
-		end
 	end
+
+	function obj:set_computers()
+		local computed = self.computed
+		local computers = self.computers
+
+		--width
+		computers.width = function( target )
+			if target.width == Element.INHERIT then
+				target.computed.width = target.parent.width
+			else 
+				target.computed.width = target.width
+			end
+		end
+
+		--height
+		computers.height = function( target )
+			if target.height == Element.INHERIT then
+				target.computed.height = target.parent.height
+			else 
+				target.computed.height = target.height
+			end
+		end
+		
+		--background
+		computers.background = function( target )
+			if target.background == Element.INHERIT or target.background == Element.TRANSPARENT then
+				target.computed.background = target.parent.background
+			else 
+				target.computed.background = target.background
+			end
+		end
+
+		--horizontal alignment
+		computers.x = function( target )
+			if target.x == Element.ALIGN_START or target.width == Element.INHERIT then
+				target.computed.x = target.parent.x
+			elseif target.x == Element.ALIGN_CENTER then
+				target.computed.x = target.parent.x + math.floor((target.parent.width - target.computed.width + 1)/2)
+			elseif target.x == Element.ALIGN_END then
+				target.computed.x = target.parent.x + target.parent.width - target.computed.width
+			else 
+				target.computed.x = target.x + target.parent.x
+			end
+		end
+
+		--vertical alignment
+		computers.y = function( target )
+			if target.y == Element.ALIGN_START or target.height == Element.INHERIT then
+				target.computed.y = target.parent.y
+			elseif target.y == Element.ALIGN_CENTER then
+				target.computed.y = target.parent.y + math.floor((target.parent.height - target.computed.height + 1)/2)
+			elseif target.y == Element.ALIGN_END then
+				target.computed.y = target.parent.y + target.parent.height - target.computed.height
+			else 
+				target.computed.y = target.y + target.parent.y
+			end
+		end
+
+	end
+	
+	obj:set_computers()
 
 	function obj:get_computed()
 		local _return = ""
@@ -134,14 +173,7 @@ function Block:new( x, y, width, height, background, callback )
 		end
 	end
 
-	function obj:add(element)
-		element.parent = self
-		table.insert(self.elements, element)
-		if self.root ~= nil then
-			element:compute()
-		end
-		return self
-	end
+	
 
 	setmetatable(obj, self)
 	self.__index = self

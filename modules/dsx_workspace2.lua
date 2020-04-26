@@ -8,10 +8,12 @@ function Workspace:new(width, height)
 	if width == nil or height == nil then
 		width, height = gpu.getResolution()
 	end
-	local obj = Element.block( 1, 1, width, height)
+	local obj = Element.block( _, _, width, height)
 	obj.buttons = Buttons:new()
 	obj.root = obj
 	obj.background = Element.TRANSPARENT
+	obj.x = 1
+	obj.y = 1
 	local values_to_copy = {'x', 'y', 'width', 'height'}
 	for _,property in ipairs(values_to_copy) do
 		obj.computed[property] = obj[property]
