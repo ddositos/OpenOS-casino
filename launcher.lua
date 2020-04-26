@@ -4,6 +4,45 @@ local term = require("term")
 local ExceptionHandler = require("dsx_exception")
 local event = require("event")
 
+
+function run( app )
+	local path = "/home/apps/" .. app .. ".lua"
+	local app = ExceptionHandler:new(loadfile(path))
+
+	while 1 do
+		app:run()
+		os.sleep(0)
+	end
+end
+
+---------------
+
+local tokenpath = "/home/token"
+local autorunpath = "/home/autorun"
+local token = ""
+
+if not fs.exists(tokenpath) then
+	io.write( "Введите токен: " )
+	token = io.read()
+	f = io.open( tokenpath, "w" )
+	f:write(token)
+	f:close()
+else 
+	f = io.open( tokenpath, "r" )
+	token = f:read()
+	f:close()
+end
+
+if fs.exists(autorunpath) then
+	f = io.open( autorunpath, "r" )
+	local autorun = f:read()
+	f:close()
+	run(autorun)
+	return 
+end 
+
+---------------
+
 local apps = {}
 local apps_assoc = {}
 
@@ -31,10 +70,22 @@ io.write(string.format(" [%i] ", i))
 gpu.setForeground(color, mode)
 io.write("Перейти в терминал\n")
 
-local id = 0
+local id, flag = 0, nil
 while 1 do
 	io.write("Выберите приложение для установки: ")
-	id = io.read()
+	line = io.read()
+	local i = 1
+	for token in line:gmatch("[^%s]+") do
+		if i == 1 then
+			id = token
+		elseif i == 2 then
+			flag = token
+		else 
+			break
+		end
+		i = i + 1
+	end
+	
 	if(apps_assoc[id] ~= nil) then
 		id = apps_assoc[id]
 		break
@@ -50,11 +101,11 @@ if id == 1+#apps then
 	return 
 end
 
-local path = "/home/apps/" .. apps[id] .. ".lua"
-
-local app = ExceptionHandler:new(loadfile(path))
-
-while 1 do
-	app:run()
-	os.sleep(0)
+if flag == "-a" then
+	f = io.open( autorunpath, "w" )
+	f:write(tostring(apps[id]))
+	f:close()
 end
+
+run(apps[id])
+
