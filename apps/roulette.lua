@@ -2,7 +2,15 @@ local component = require("component")
 local Workspace = require("dsx_workspace")
 local gpu = require("component").gpu
 
-local db = require("dsx_db"):new("pank228")
+local function get_token()
+	local token = ""
+	local f = io.open( "/home/token" )
+	token = f:read()
+	f:close()
+	return token
+end
+
+local db = require("dsx_db"):new(get_token)
 
 local mouse = {
 	left = 0,

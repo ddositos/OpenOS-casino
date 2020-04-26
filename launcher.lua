@@ -24,6 +24,7 @@ local token = ""
 if not fs.exists(tokenpath) then
 	io.write( "Введите токен: " )
 	token = io.read()
+	term.clear()
 	f = io.open( tokenpath, "w" )
 	f:write(token)
 	f:close()
