@@ -195,6 +195,8 @@ function Text:new( offsetx, offsety, text, foreground, background )
 			computed.background = self.background
 		end
 
+		self:wrap()
+
 		if self.foreground == Element.INHERIT then
 			computed.foreground = parent.foreground
 		else 
@@ -212,7 +214,7 @@ function Text:new( offsetx, offsety, text, foreground, background )
 			computed.y = self.offsety
 		end	
 
-		self:wrap()
+		
 		
 	end
 
