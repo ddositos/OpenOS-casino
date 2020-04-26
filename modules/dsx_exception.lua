@@ -10,6 +10,9 @@ function Handler:new(app)
 
 	function obj:render(reason)
 		reason = tostring(reason)
+		local width, height = gpu.getResolution()
+		width = math.max( width, 30 )
+		height = math.max( height, 15 )
 		local ws = Workspace:new()
 		ws:add( 
 			Element.block( 1, 1, Element.INHERIT, Element.INHERIT, 0x222222 )
@@ -25,7 +28,7 @@ function Handler:new(app)
 				end)
 				:add(Element.text( Element.ALIGN_CENTER, Element.ALIGN_CENTER, "Перезагрузить", 0x222222))
 			)
-			:add(Element.text( 3, 7, reason, 0xdddddd))
+			:add(Element.text( Element.ALIGN_CENTER, Element.ALIGN_CENTER, reason, 0xdddddd))
 		)
 			
 		ws:draw()
