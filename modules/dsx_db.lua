@@ -1,6 +1,7 @@
 local internet = require("internet")
 local component = require("component")
 local serialization = require("serialization")
+local event = require("event")
 local modem
 
 local port
