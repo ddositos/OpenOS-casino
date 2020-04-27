@@ -1,4 +1,19 @@
 local internet = require("internet")
+local component = require("component")
+local serialization = require("serialization")
+local modem
+
+local port
+local use_modem = false
+local server = ""
+
+if component.isAvailable("modem") then
+	modem = component.modem
+	port = 6204
+	modem.open(port)
+	modem.setWakeMessage("server_wake")
+	use_modem = true;
+end
 
 Database = {}
 function Database:new(token)
@@ -11,8 +26,16 @@ function Database:new(token)
 	function obj:API_request(type, params)
 		params.token = self.token
 		local data = ""
-		for temp in internet.request(self.url .. type .. "/", params ) do      
-			data = data ..  temp
+		if use_modem then
+			modem.send(server, port, type, serialization.serialize(params))
+			_, _, _, _, _, data = event.pull("modem_message", _, _, server, port)
+			if data == "error" then
+				error("error: wrong request")
+			end
+		else 
+			for temp in internet.request(self.url .. type .. "/", params ) do      
+				data = data ..  temp
+			end
 		end
 		return data
 	end
