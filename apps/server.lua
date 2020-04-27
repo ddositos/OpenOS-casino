@@ -112,5 +112,6 @@ while true do
 	local _, _, from, _, _, type, params = event.pull( "modem_message", _, _, _, port )
 	params = serialization.unserialize( params )
 	local response = server:query( type, params )
+	io.write(string.format( "from %s: %s\n response: %s\n----------------\n", from, type, response ))
 	modem.send( from, port, response )
 end
