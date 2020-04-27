@@ -111,7 +111,7 @@ local server = Server:new()
 while true do 
 	local _port = nil
 	local _, _, from, _, _port, type, params
-	while _port ~= port then
+	while _port ~= port do
 		_, _, from, _, _port, type, params = event.pull( "modem_message" )
 	end
 	params = serialization.unserialize( params )
