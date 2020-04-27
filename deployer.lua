@@ -17,7 +17,8 @@ local modules = {
 	"event", "dsx_workspace2", "dsx_element"
 }
 local apps = {
-	"manager", "roulette", "terminal_out","terminal_in", "reinstall", "terminal_check", "top"
+	"manager", "roulette", "terminal_out","terminal_in", 
+	"reinstall", "terminal_check", "top", "server"
 }
 
 local github = "https://raw.githubusercontent.com/ddositos/OpenOS-casino/master"
