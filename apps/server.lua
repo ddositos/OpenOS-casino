@@ -22,7 +22,7 @@ end
 
 local index = "/home/db/"
 if not fs.exists( index ) then
-	fs.makeDirectory( "index" )
+	fs.makeDirectory( index )
 end
 
 local port = 6204
