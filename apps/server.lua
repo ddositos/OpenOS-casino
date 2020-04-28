@@ -10,6 +10,7 @@ if not fs.exists( index ) then
 end
 
 local port = 6204
+local server_port = 6205
 local wakemessage = "server_wake"
 modem.open(port)
 modem.broadcast(port, wakemessage)
@@ -108,14 +109,14 @@ end
 
 local server = Server:new()
 
+os.sleep(5)
+
+modem.broadcast( server_port, "")
+
 while true do 
-	local _port = nil
-	local _, _, from, _, _port, type, params
-	while _port ~= port do
-		_, _, from, _, _port, type, params = event.pull( "modem_message" )
-	end
+	local _, _, from, _, port, type, params = event.pull( "modem_message", _, _, _, port )
 	params = serialization.unserialize( params )
 	local response = server:query( type, params )
-	io.write(string.format( "from %s: %s\n response: %s\n", from, type, response  ))
+	io.write(string.format( "from %s: %s\n response: %s\n-------------\n", from, type, response  ))
 	modem.send( from, port, response )
 end

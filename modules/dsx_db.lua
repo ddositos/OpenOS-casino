@@ -4,16 +4,17 @@ local serialization = require("serialization")
 local event = require("event")
 local modem
 
-local port
+local port = 6204
+local server_port = 6205
 local use_modem = false
 local server = ""
 
 if component.isAvailable("modem") then
 	modem = component.modem
-	port = 6204
 	modem.open(port)
 	modem.setWakeMessage("server_wake")
 	use_modem = true;
+	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port )
 end
 
 Database = {}
@@ -28,7 +29,7 @@ function Database:new(token)
 		params.token = self.token
 		local data = ""
 		if use_modem then
-			io.write(type, " ", serialization.serialize(params), "\n")
+			--io.write(type, " ", serialization.serialize(params), "\n")
 			modem.send(server, port, type, serialization.serialize(params))
 			_, _, _, _, _, data = event.pull("modem_message", _, _, server, port)
 			if data == "error" then
