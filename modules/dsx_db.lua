@@ -11,7 +11,9 @@ local server = ""
 
 function connect()
 	modem.broadcast( server_port )
-	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port, nil, "server_connect" )
+	_, _, server, _, _ = event.pullFiltered( function( name, _, _, _port, _, message)
+		return name == "modem_message" and _port == server_port and message == "server_connect"
+	end)
 end
 
 if component.isAvailable("modem") then
