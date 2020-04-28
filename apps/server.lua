@@ -12,7 +12,10 @@ function file_read( path )
 end
 
 function file_write( path, data )
-	local file = io.open( path, "w" )
+	local file, reason = io.open( path, "w" )
+	if file == nil then
+		error(reason)
+	end
 	file:write( data )
 	file:close()
 end
