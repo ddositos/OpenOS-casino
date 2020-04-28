@@ -9,12 +9,17 @@ local server_port = 6205
 local use_modem = false
 local server = ""
 
+function connect()
+	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port )
+end
+
 if component.isAvailable("modem") then
 	modem = component.modem
-	modem.open(port)
-	modem.setWakeMessage("server_wake")
+	modem.open( port )
+	modem.open( server_port )
+	modem.setWakeMessage( "server_wake" )
 	use_modem = true;
-	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port )
+	connect()
 end
 
 Database = {}

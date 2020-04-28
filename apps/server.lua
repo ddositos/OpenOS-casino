@@ -12,8 +12,9 @@ end
 local port = 6204
 local server_port = 6205
 local wakemessage = "server_wake"
-modem.open(port)
-modem.broadcast(port, wakemessage)
+modem.open( port )
+modem.open( server_port )
+modem.broadcast( server_port, wakemessage )
 
 function file_read( path )
 	local file = io.open( path, "r" )
@@ -109,14 +110,18 @@ end
 
 local server = Server:new()
 
-os.sleep(5)
-
-modem.broadcast( server_port, "")
 
 while true do 
-	local _, _, from, _, port, type, params = event.pull( "modem_message", _, _, _, port )
-	params = serialization.unserialize( params )
-	local response = server:query( type, params )
-	io.write(string.format( "from %s: %s\n response: %s\n-------------\n", from, type, response  ))
-	modem.send( from, port, response )
+	local _, _, from, _, port, type, params = event.pullFiltered(function( name, _, _, _, _port)
+		return name == "modem_message" and ( _port == port or _port == server_port )
+	end)
+	if port == server_port then
+		io.write(string.format( "from %s: connection request", from ))
+		modem.send( from, server_port )
+	else 
+		params = serialization.unserialize( params )
+		local response = server:query( type, params )
+		io.write(string.format( "from %s: %s\n response: %s\n-------------\n", from, type, response  ))
+		modem.send( from, port, response )
+	end
 end
