@@ -30,8 +30,6 @@ modem.open( port )
 modem.open( server_port )
 modem.broadcast( server_port, wakemessage )
 
-
-
 local Server = {}
 function Server:new( )
 	local obj = {}
@@ -65,10 +63,10 @@ function Server:new( )
 
 	function obj:pay( params )
 		local nickname = params.nickname
-		local delta = params.delta
+		local delta = tonumber(params.delta)
 		local path = index .. nickname
 		if fs.exists( path ) then
-			delta = delta + tonumber(file_read( params ))
+			delta = delta + tonumber(file_read( path ))
 		end
 		file_write( path, delta )
 	end
