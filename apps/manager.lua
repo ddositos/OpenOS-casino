@@ -112,6 +112,6 @@ while true do
 	end
 	
 	if q ~= nil then
-		io.write( " ".. invoke_comand( q, args ) .. "\n" )
+		io.write( " " .. invoke_comand( q, args ) .. "\n" )
 	end
 end

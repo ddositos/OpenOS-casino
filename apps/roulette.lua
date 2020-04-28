@@ -10,7 +10,7 @@ local function get_token()
 	return token
 end
 
-local db = require("dsx_db"):new(get_token)
+local db = require("dsx_db"):new(get_token())
 
 local mouse = {
 	left = 0,
