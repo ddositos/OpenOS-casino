@@ -116,11 +116,11 @@ end
 local server = Server:new()
 
 while true do 
-	local _, _, from, port, type, params = event.pullFiltered(function( name, _, _, _port )
+	local _, _, from, port, _, type, params = event.pullFiltered(function( name, _, _, _port )
 		return name == "modem_message" and ( _port == port or _port == server_port )
 	end)
 	if port == server_port then
-		io.write(string.format( "from %s: connection request", from ))
+		io.write(string.format( "from %s: connection request\n", from ))
 		modem.send( from, server_port, "server_connect" )
 	else 
 		unserialized = serialization.unserialize( params )
