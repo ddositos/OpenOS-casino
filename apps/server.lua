@@ -108,7 +108,7 @@ function Server:new( )
 		end
 		local _return = ""
 		for i, pair in ipairs(top) do
-			_return = _return .. string.format( "%s %i коинов\n", pair[1], pair[0] )
+			_return = _return .. string.format( "%s %i коинов\n", pair[2], pair[1] )
 		end
 		return _return
 	end
