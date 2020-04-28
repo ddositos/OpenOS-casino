@@ -92,19 +92,23 @@ function Server:new( )
 		for nickname in fs.list( index ) do
 			local path = index .. nickname
 			local balance = tonumber(file_read( path ))
+			local pair = { balance, nickname }
 			for i, value in ipairs( top ) do
-				if value <= balance then
-					table.insert( top, i, balance )
+				if value <= pair[0] then
+					table.insert( top, i, pair )
 					break
 				end
+			end
+			if #top == 0 then
+				table.insert( top, pair )
 			end
 			if #top >= 6 then
 				table.remove( top )
 			end
 		end
 		local _return = ""
-		for i, elem in ipairs(top) do
-			_return = _return .. elem .. "\n"
+		for i, pair in ipairs(top) do
+			_return = _return .. string.format( "%s %i коинов\n", pair[1], pair[0] )
 		end
 		return _return
 	end
