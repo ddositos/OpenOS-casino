@@ -10,7 +10,8 @@ local use_modem = false
 local server = ""
 
 function connect()
-	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port )
+	modem.broadcast( server_port )
+	_, _, server, _, _ = event.pull( "modem_message", nil, nil, nil, server_port, nil, "server_connect" )
 end
 
 if component.isAvailable("modem") then

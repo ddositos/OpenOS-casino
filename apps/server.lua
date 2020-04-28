@@ -4,18 +4,6 @@ local modem = component.modem
 local serialization = require("serialization")
 local fs = require("filesystem")
 
-local index = "/home/db/"
-if not fs.exists( index ) then
-	fs.makeDirectory( "index" )
-end
-
-local port = 6204
-local server_port = 6205
-local wakemessage = "server_wake"
-modem.open( port )
-modem.open( server_port )
-modem.broadcast( server_port, wakemessage )
-
 function file_read( path )
 	local file = io.open( path, "r" )
 	local data = file:read()
@@ -29,12 +17,29 @@ function file_write( path, data )
 	file:close()
 end
 
+local index = "/home/db/"
+if not fs.exists( index ) then
+	fs.makeDirectory( "index" )
+end
+
+local port = 6204
+local server_port = 6205
+local wakemessage = "server_wake"
+local token = file_read("/home/token")
+modem.open( port )
+modem.open( server_port )
+modem.broadcast( server_port, wakemessage )
+
+
+
 local Server = {}
 function Server:new( )
 	local obj = {}
 
 	function obj:query( type, params  )
-		if type == "users/get" then
+		if params.token ~= token then
+			return "error"
+		elseif type == "users/get" then
 			return self:get( params )
 		elseif type == "users/pay" then
 			return self:pay( params )
@@ -110,14 +115,13 @@ end
 
 local server = Server:new()
 
-
 while true do 
 	local _, _, from, _, port, type, params = event.pullFiltered(function( name, _, _, _, _port)
 		return name == "modem_message" and ( _port == port or _port == server_port )
 	end)
 	if port == server_port then
 		io.write(string.format( "from %s: connection request", from ))
-		modem.send( from, server_port )
+		modem.send( from, server_port, "server_connect" )
 	else 
 		params = serialization.unserialize( params )
 		local response = server:query( type, params )
