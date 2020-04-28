@@ -124,8 +124,9 @@ while true do
 		modem.send( from, server_port, "server_connect" )
 	else 
 		unserialized = serialization.unserialize( params )
+		io.write(string.format( "from %s: %s\nparams: %s\n", from, type, params ))
 		local response = server:query( type, unserialized )
-		io.write(string.format( "from %s: %s\n params: %s\n response: %s\n-------------\n", from, type,params, response  ))
+		io.write(string.format( "response: %s\n-------------\n", response ))
 		modem.send( from, port, response )
 	end
 end
