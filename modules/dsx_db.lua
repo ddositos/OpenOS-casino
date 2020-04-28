@@ -34,6 +34,9 @@ function Database:new(token)
 	}
 
 	function obj:API_request(type, params)
+		if params == nil then
+			params = {}
+		end
 		params.token = self.token
 		local data = ""
 		if use_modem then
@@ -85,7 +88,7 @@ function Database:new(token)
 	end
 
 	function obj:top()
-		return (self:API_request("users/top",{ }))
+		return (self:API_request("users/top", {}))
 	end
 
 	setmetatable(obj, self)

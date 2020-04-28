@@ -36,7 +36,7 @@ local Server = {}
 function Server:new( )
 	local obj = {}
 
-	function obj:query( type, params  )
+	function obj:query( type, params )
 		if params.token ~= token then
 			return "error"
 		elseif type == "users/get" then
@@ -123,9 +123,9 @@ while true do
 		io.write(string.format( "from %s: connection request", from ))
 		modem.send( from, server_port, "server_connect" )
 	else 
-		params = serialization.unserialize( params )
-		local response = server:query( type, params )
-		io.write(string.format( "from %s: %s\n response: %s\n-------------\n", from, type, response  ))
+		unserialized = serialization.unserialize( params )
+		local response = server:query( type, unserialized )
+		io.write(string.format( "from %s: %s\n params: %s\n response: %s\n-------------\n", from, type,params, response  ))
 		modem.send( from, port, response )
 	end
 end
