@@ -28,6 +28,7 @@ function Database:new(token)
 		params.token = self.token
 		local data = ""
 		if use_modem then
+			io.write(type, " ", serialization.serialize(params), "\n")
 			modem.send(server, port, type, serialization.serialize(params))
 			_, _, _, _, _, data = event.pull("modem_message", _, _, server, port)
 			if data == "error" then
