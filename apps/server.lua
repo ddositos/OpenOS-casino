@@ -120,13 +120,13 @@ while true do
 		return name == "modem_message" and ( _port == port or _port == server_port )
 	end)
 	if port == server_port then
-		io.write(string.format( "from %s: connection request\n", from ))
+		io.write(string.format( "from %s: connection request\n\n", from ))
 		modem.send( from, server_port, "server_connect" )
 	else 
 		unserialized = serialization.unserialize( params )
 		io.write(string.format( "from %s: %s\nparams: %s\n", from, type, params ))
 		local response = server:query( type, unserialized )
-		io.write(string.format( "response: %s\n-------------\n", response ))
-		modem.send( from, port, response )
+		io.write(string.format( "response: %s\n\n", response ))
+		modem.send( from, port, tostring(response))
 	end
 end

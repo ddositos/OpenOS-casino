@@ -42,7 +42,9 @@ function Database:new(token)
 		if use_modem then
 			--io.write(type, " ", serialization.serialize(params), "\n")
 			modem.send(server, port, type, serialization.serialize(params))
-			_, _, _, _, _, data = event.pull("modem_message", _, server, port)
+			_, _, _, _, _, data = event.pullFiltered(function(name, _, from, _port)
+				return name == "modem_message" and from == server and _port == port
+			end)
 			if data == "error" then
 				error("error: wrong request")
 			end
@@ -51,6 +53,7 @@ function Database:new(token)
 				data = data ..  temp
 			end
 		end
+		io.write(data)
 		return data
 	end
 
