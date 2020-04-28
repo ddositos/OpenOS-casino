@@ -93,15 +93,18 @@ function Server:new( )
 			local path = index .. nickname
 			local balance = tonumber(file_read( path ))
 			local pair = { balance, nickname }
+			local inserted = false
 			for i, value in ipairs( top ) do
-				if value <= pair[0] then
+				if value[1] <= pair[1] then
 					table.insert( top, i, pair )
+					inserted = true
 					break
 				end
 			end
-			if #top == 0 then
+			if not inserted then
 				table.insert( top, pair )
 			end
+			
 			if #top >= 6 then
 				table.remove( top )
 			end
