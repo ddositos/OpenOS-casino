@@ -40,7 +40,6 @@ function Database:new(token)
 		params.token = self.token
 		local data = ""
 		if use_modem then
-			--io.write(type, " ", serialization.serialize(params), "\n")
 			modem.send(server, port, type, serialization.serialize(params))
 			_, _, _, _, _, data = event.pullFiltered(function(name, _, from, _port)
 				return name == "modem_message" and from == server and _port == port
@@ -53,7 +52,6 @@ function Database:new(token)
 				data = data ..  temp
 			end
 		end
-		io.write(data)
 		return data
 	end
 
