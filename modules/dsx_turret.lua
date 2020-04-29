@@ -17,7 +17,7 @@ function Turret:new( id, x, y, z )
 			z = z - self.z
 		}
 		
-		local yaw = math.deg(math.atan2(x,z))
+		local yaw = -math.deg(math.atan2(-x,-z))
 		local dist = math.sqrt(x*x+z*z)
 		local pitch = math.deg(math.atan(y/dist))
 		pitch = math.min(pitch, 90)
