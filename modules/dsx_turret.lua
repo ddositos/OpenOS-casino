@@ -17,7 +17,7 @@ function Turret:new( id, x, y, z )
 			z = z - self.z
 		}
 		
-		local yaw = math.deg(math.atan2(target.x,-target.z))
+		local yaw = math.deg(math.atan2(target.x,target.z))
 		if yaw < 0 then
 			yaw = yaw + 360
 		end
