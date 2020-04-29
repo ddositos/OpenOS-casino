@@ -13,17 +13,14 @@ function Turret:new( id, x, y, z )
 	function obj:attack( x, y, z )
 		local target = {
 			x = x - self.x,
-			y = y - self.y,
+			y = y - self.y+1,
 			z = z - self.z
 		}
 		
-		local deg = -math.deg(math.atan(x/z))
-		if z >= 0 then
-			deg = deg + 180
-		end
+		local yaw = math.deg(math.atan2(x,z))
 		local dist = math.sqrt(x*x+z*z)
-    	local degv = math.deg(math.atan(y/dist))
-		self.proxy.moveTo( deg, degv )
+    	local pitch = math.deg(math.atan(y/yaw))
+		self.proxy.moveTo( math.round(yaw), math.round(pitch))
 		self.proxy.fire()
 	end
 
