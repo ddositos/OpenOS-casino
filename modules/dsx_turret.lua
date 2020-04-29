@@ -13,11 +13,11 @@ function Turret:new( id, x, y, z )
 	function obj:attack( x, y, z )
 		local target = {
 			x = x - self.x,
-			y = y - self.y+1,
+			y = y - self.y,
 			z = z - self.z
 		}
 		
-		local yaw = math.deg(math.atan2(target.x,target.z))
+		local yaw = math.deg(math.atan2(target.x,-target.z))
 		if yaw < 0 then
 			yaw = yaw + 360
 		end
