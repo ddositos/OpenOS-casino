@@ -3,6 +3,7 @@ local component = require("component")
 local Turret = {}
 function Turret:new( id, x, y, z )
 	local obj = {
+		id = id,
 		proxy = component.proxy(id),
 		x = x,
 		y = y,
