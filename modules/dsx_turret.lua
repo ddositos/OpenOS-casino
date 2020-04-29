@@ -21,11 +21,11 @@ function Turret:new( id, x, y, z )
 		if yaw < 0 then
 			yaw = yaw + 360
 		end
-		local dist = math.sqrt(target.x*target.x+target.z*target.z)
+		local dist = math.sqrt(target.x*target.x + target.z*target.z)
 		local pitch = math.deg(math.atan2(target.y,dist))
 		pitch = math.min(pitch, 90)
 		pitch = math.max(pitch, -45)
-		self.proxy.moveTo( dist, degv )
+		self.proxy.moveTo( yaw, pitch )
 		self.proxy.fire()
 	end
 
