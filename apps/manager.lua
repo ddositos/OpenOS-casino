@@ -1,4 +1,12 @@
-local db = require("dsx_db"):new("pank228")
+local function get_token()
+	local token = ""
+	local f = io.open( "/home/token" )
+	token = f:read()
+	f:close()
+	return token
+end
+
+local db = require("dsx_db"):new(get_token())
 local com = require("component")
 local gpu = com.gpu
 local term = require("term")
