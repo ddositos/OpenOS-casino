@@ -1,6 +1,14 @@
 local Workspace = require("dsx_workspace2")
 local Element = require("dsx_element")
-local db = require("dsx_db"):new("pank228") --TODO: убрать
+
+local function get_token()
+	local token = ""
+	local f = io.open( "/home/token" )
+	token = f:read()
+	f:close()
+	return token
+end
+local db = require("dsx_db"):new( get_token() )
 
 
 local WIDTH = 46
