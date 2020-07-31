@@ -17,6 +17,11 @@ local mouse = {
 	right = 1
 }
 
+local bet_size = {
+	low = 1,
+	high = 5
+}
+
 local chat = component.chat_box
 
 chat.setName("§5Рулетка§7§o")
@@ -214,67 +219,67 @@ local function render()
 	--задний фон
 	ws1:bind(1, 1, WIDTH, HEIGHT, 0x005500)
 	ws1:text(98, 16, "Ставки:", 0x005500, 0xffffff)
-	ws1:text(98, 17, "ЛКМ 10", 0x005500, 0xffffff)
-	ws1:text(98, 18, "ПКМ 60", 0x005500, 0xffffff)
+	ws1:text(98, 17, "ЛКМ " .. bet_size.low, 0x005500, 0xffffff)
+	ws1:text(98, 18, "ПКМ " .. bet_size.high, 0x005500, 0xffffff)
 	--белая рамка
 	ws1:bind(3, 2, 103, 13, 0xeeeeee)
 	ws1:bind(10, 15, 86, 8, 0xeeeeee)
 
 	--зеленая кнопка 0
 	ws1:bind(5, 3, 5, 11, 0x00ee00, function(_,_,nickname, button)
-		return bet(nickname, 0, button == mouse.left and 10 or 60)
+		return bet(nickname, 0, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(7, 8, "0", 0x00ee00, 0xffffff)
 
 	--управляющие кнопки
 	ws1:bind(12, 15, 26, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 40, button == mouse.left and 10 or 60)
+		return bet(nickname, 40, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(21, 16, "Первая 12", 0x009900, 0xffffff)
 	ws1:bind(40, 15, 26, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 41, button == mouse.left and 10 or 60)
+		return bet(nickname, 41, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(49, 16, "Вторая 12", 0x009900, 0xffffff)
 	ws1:bind(68, 15, 26, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 42, button == mouse.left and 10 or 60)
+		return bet(nickname, 42, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(76, 16, "Третья 12", 0x009900, 0xffffff)
 	
 	ws1:bind(12, 19, 12, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 43, button == mouse.left and 10 or 60)
+		return bet(nickname, 43, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(16, 20, "1-18", 0x009900, 0xffffff)
 	ws1:bind(26, 19, 12, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 45, button == mouse.left and 10 or 60)
+		return bet(nickname, 45, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(30, 20, "Чет", 0x009900, 0xffffff)
 	ws1:bind(40, 19, 12, 3, 0xdd0000, function(_,_,nickname, button)
-		return bet(nickname, 47, button == mouse.left and 10 or 60)
+		return bet(nickname, 47, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(42, 20, "Красное", 0xdd0000, 0xffffff)
 	ws1:bind(54, 19, 12, 3, 0x000000, function(_,_,nickname, button)
-		return bet(nickname, 48, button == mouse.left and 10 or 60)
+		return bet(nickname, 48, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(57, 20, "Черное", 0x000000, 0xffffff)
 	ws1:bind(68, 19, 12, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 46, button == mouse.left and 10 or 60)
+		return bet(nickname, 46, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(71, 20, "Нечет", 0x009900, 0xffffff)
 	ws1:bind(82, 19, 12, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 44, button == mouse.left and 10 or 60)
+		return bet(nickname, 44, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(85, 20, "19-36", 0x009900, 0xffffff)
 	
 	ws1:bind(96, 3, 8, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 37, button == mouse.left and 10 or 60)
+		return bet(nickname, 37, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(98, 4, "1 ряд", 0x009900, 0xffffff)
 	ws1:bind(96, 7, 8, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 38, button == mouse.left and 10 or 60)
+		return bet(nickname, 38, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(98, 8, "2 ряд", 0x009900, 0xffffff)
 	ws1:bind(96, 11, 8, 3, 0x009900, function(_,_,nickname, button)
-		return bet(nickname, 39, button == mouse.left and 10 or 60)
+		return bet(nickname, 39, button == mouse.left and bet_size.low or bet_size.high)
 	end)
 	ws1:text(98, 12, "3 ряд", 0x009900, 0xffffff)
 
@@ -289,7 +294,7 @@ local function render()
 		local x = 12 + (j%12)*7
 		local y = 3 +  math.floor(j/12)*4
 		ws1:bind(x,y,5,3,color, function(_,_,nickname, button)
-			return bet(nickname, i, button == mouse.left and 10 or 60)
+			return bet(nickname, i, button == mouse.left and bet_size.low or bet_size.high)
 		end)
 		ws1:text(x+2, y+1, tostring(i), color, 0xffffff)
 	end
