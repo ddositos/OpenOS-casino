@@ -29,7 +29,6 @@ local sides = {
 local me = component.me_controller
 local redstone = component.redstone
 
-local function setOutput(  )
 redstone.setOutput(sides.north, 0)
 
 local currency = {
