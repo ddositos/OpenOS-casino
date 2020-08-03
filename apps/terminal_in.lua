@@ -26,12 +26,14 @@ local sides = {
 }
 
 
-local me = component.me_interface
+local me = component.me_controller
 local redstone = component.redstone
+
+local function setOutput(  )
 redstone.setOutput(sides.north, 0)
 
 local currency = {
-	name = "minecraft:iron_ingot"
+	name = "contenttweaker:money"
 }
 
 local function getCurrencyAmount()
