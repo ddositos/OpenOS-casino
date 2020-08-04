@@ -184,7 +184,7 @@ while true do
 			balance = db:get(nickname), 
 			introduced = currency_amount
 		}):draw()
-		if os.time() - time > 750 and currency_amount == 0 then
+		if os.time() - time > 1000 and currency_amount == 0 then
 			goto continue
 		end
 
@@ -193,8 +193,8 @@ while true do
 			goto continue
 		elseif type == action.deposit then
 			if currency_amount ~= 0 then
-				bus.import.turnOff()
 				screen.loading():draw()
+				bus.import.turnOff()
 				os.sleep(0)
 				db:pay(nickname, math.floor(currency_amount*0.95))
 				screen.message("Инкассаторы перевозят валюту..."):draw()
@@ -203,6 +203,7 @@ while true do
 					os.sleep(0)
 				end
 				bus.export.turnOff()
+				goto continue
 			end
 		end
 		os.sleep(0)
