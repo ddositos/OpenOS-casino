@@ -172,7 +172,8 @@ while true do
 	while nickname == nil do
 		nickname = screen__start.buttons:pull()
 	end
-	screen.terminal():draw()
+	local screen__terminal = screen.terminal()
+	screen__terminal:draw()
 	bus.import.turnOn()
 
 	local time = os.time()
@@ -187,7 +188,7 @@ while true do
 			goto continue
 		end
 
-		local type = ws.buttons:pull(nickname)
+		local type = screen__terminal.buttons:pull(nickname)
 		if type == action.exit then
 			goto continue
 		elseif type == action.deposit then
@@ -197,7 +198,6 @@ while true do
 				os.sleep(0)
 				db:pay(nickname, math.floor(currency_amount*0.95))
 				screen.message("Инкассаторы перевозят валюту...")
-				waitForTransfer()
 				bus.export.turnOn()
 				while count_currency() ~= 0 do
 					os.sleep(0)
