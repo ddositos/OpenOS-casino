@@ -49,7 +49,7 @@ local db = require("dsx_db"):new( get_token() )
 
 local currency = {
 	get = function() 
-		{ name = "contenttweaker:money" }
+		return { name = "contenttweaker:money" }
 	end,
 	count = function()
 		local temp = me.getItemsInNetwork(currency.get())
