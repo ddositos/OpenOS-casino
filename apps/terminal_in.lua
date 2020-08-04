@@ -152,10 +152,10 @@ screen.terminalOverlay = function( details )
 	ws:add(
 		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, Element.TRANSPARENT)
 		:add(Element.text(17, 2, details.nickname, color.foreground, color.background))
-		:add(Element.text(11, 3, details.balance, color.foreground, color.background))
-		:add(Element.text(12, 4, details.introduced, color.foreground, color.background))
-		:add(Element.text(15, 5, details.replenishment, color.foreground, color.background))
-		:add(Element.text(13, 6, details.comission, color.foreground, color.background))
+		:add(Element.text(11, 3, math.floor(numberdetails.balance), color.foreground, color.background))
+		:add(Element.text(12, 4, math.floor(details.introduced), color.foreground, color.background))
+		:add(Element.text(15, 5, math.floor(details.replenishment), color.foreground, color.background))
+		:add(Element.text(13, 6, math.floor(details.comission), color.foreground, color.background))
 	)
 	return ws
 end
@@ -194,10 +194,10 @@ while true do
 		elseif type == action.deposit then
 			if currency_amount ~= 0 then
 				bus.import.turnOff()
-				screen.loading:draw()
+				screen.loading():draw()
 				os.sleep(0)
 				db:pay(nickname, math.floor(currency_amount*0.95))
-				screen.message("Инкассаторы перевозят валюту...")
+				screen.message("Инкассаторы перевозят валюту..."):draw()
 				bus.export.turnOn()
 				while count_currency() ~= 0 do
 					os.sleep(0)
