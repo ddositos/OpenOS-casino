@@ -47,18 +47,15 @@ local function get_token()
 end
 local db = require("dsx_db"):new( get_token() )
 
-local currency = {
-	get = function() 
-		return { name = "contenttweaker:money" }
-	end,
-	count = function()
-		local temp = me.getItemsInNetwork(currency.get())
-		if temp.n == 0 then
-			return 0
-		end
-		return temp[1].size
+local currency = { name = "contenttweaker:money" }
+local count_currency = function()
+	local temp = me.getItemsInNetwork(currency)
+	if temp.n == 0 then
+		return 0
 	end
-}
+	return temp[1].size
+end
+
 
 
 local action = {
@@ -180,7 +177,7 @@ while true do
 
 	local time = os.time()
 	while true do
-		local currency_amount = currency.count()
+		local currency_amount = count_currency()
 		screen.terminalOverlay({
 			nickname = nickname,
 			balance = db:get(nickname), 
@@ -198,11 +195,11 @@ while true do
 				bus.import.turnOff()
 				screen.loading:draw()
 				os.sleep(0)
-				db:pay(nickname, math.floor(currency*0.95))
+				db:pay(nickname, math.floor(currency_amount*0.95))
 				screen.message("Инкассаторы перевозят валюту...")
 				waitForTransfer()
 				bus.export.turnOn()
-				while currency.count() ~= 0 do
+				while count_currency() ~= 0 do
 					os.sleep(0)
 				end
 				bus.export.turnOff()
