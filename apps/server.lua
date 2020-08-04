@@ -31,7 +31,6 @@ local wakemessage = "server_wake"
 local token = file_read("/home/token")
 modem.open( port )
 modem.open( server_port )
-modem.broadcast( server_port, wakemessage )
 
 local Server = {}
 function Server:new( )
@@ -124,6 +123,7 @@ end
 local server = Server:new()
 
 while true do 
+	modem.broadcast( server_port, wakemessage )
 	local _, _, from, port, _, type, params = event.pullFiltered(function( name, _, _, _port )
 		return name == "modem_message" and ( _port == port or _port == server_port )
 	end)
