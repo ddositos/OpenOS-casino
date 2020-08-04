@@ -11,7 +11,6 @@ local color = {
 	error = 0xdd0000
 }
 
---[[
 local me = component.me_controller
 local redstone = component.redstone
 
@@ -47,7 +46,7 @@ local function get_token()
 	return token
 end
 local db = require("dsx_db"):new( get_token() )
-]]--
+
 local currency = {
 	get = function() 
 		{ name = "contenttweaker:money" }
