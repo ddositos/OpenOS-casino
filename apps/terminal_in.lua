@@ -193,7 +193,6 @@ while true do
 		local type = ws.buttons:pull(nickname)
 		if type == action.exit then
 			goto continue
-		end
 		elseif type == action.deposit then
 			if currency_amount ~= 0 then
 				bus.import.turnOff()
