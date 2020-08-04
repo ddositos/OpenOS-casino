@@ -9,7 +9,7 @@ local function get_token()
 	return token
 end
 
-local db = require("dsx_db"):new(get_token()) --TODO: убрать
+local db = require("dsx_db"):new(get_token())
 
 
 local function screen1()

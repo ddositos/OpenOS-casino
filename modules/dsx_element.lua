@@ -154,20 +154,20 @@ function Text:new( offsetx, offsety, text, foreground, background )
 	local obj = {
 		offsetx = offsetx,
 		offsety = offsety,
-		text = text,
+		text = tostring(text),
 		background = background,
 		foreground = foreground,
 		computed = {}
 	}
 
 	function obj:wrap()
-		if #self.text > 8000 then
+		if unicode.len(self.text) > 8000 then
 			error( "String is too long" )
 		end
 		local chunks = {}
 		local chunk = ""
 		for token in self.text:gmatch("[^%s]+") do
-			if #chunk + 1 + #token <= self.parent.width then
+			if unicode.len(chunk) + 1 + unicode.len(token) <= self.parent.width then
 				if chunk ~= "" then
 					chunk = chunk .. " "
 				end
