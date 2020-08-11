@@ -219,7 +219,7 @@ while true do
 				os.sleep(2)
 			else 
 				bus.export.turnOn()
-				os.sleep(0.5) --подогнать
+				os.sleep(0.6) --подогнать
 				bus.export.turnOff()
 				db:pay(nickname, -16)
 			end
