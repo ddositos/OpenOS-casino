@@ -172,7 +172,6 @@ while true do
 		while not chest.isEmpty() do
 			os.sleep(0)
 		end
-		screen__terminal:draw()
 	end
 	
 	screen__start:draw()
@@ -217,6 +216,7 @@ while true do
 			end
 			if status == false then
 				screen.error(reason)
+				os.sleep(2)
 			else 
 				bus.export.turnOn()
 				os.sleep(0.5) --подогнать
