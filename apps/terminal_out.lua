@@ -198,7 +198,7 @@ while true do
 			balance = db:get(nickname)
 		}):draw()
 
-		local type = ws.buttons:pull(nickname)
+		local type = screen__terminal:pull(nickname)
 		if type == action.exit then
 			goto continue
 		elseif type == action.withdraw then
