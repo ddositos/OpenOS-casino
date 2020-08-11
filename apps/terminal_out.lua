@@ -1,5 +1,45 @@
 local component = require("component")
-local Workspace = require("dsx_workspace")
+local Workspace = require("dsx_workspace2")
+local Element = require("dsx_element")
+local sides = require("sides")
+
+local WIDTH, HEIGHT = 50,25
+
+local color = {
+	background = 0x222222,
+	foreground = 0xeeeeee,
+	error = 0xdd0000
+}
+
+
+local me = component.me_controller
+local redstone = component.redstone
+
+for i = 0, 5 do 
+	redstone.setOutput(i, 0)
+end
+
+local bus = { 
+	export = {}
+}
+
+bus.export.turnOn = function()
+	for i=2,5 do
+		redstone.setOutput(i, 15)
+	end
+end
+bus.export.turnOff = function()
+	for i=2,5 do
+		redstone.setOutput(i, 0)
+	end
+end
+
+local chest = {}
+
+chest.isEmpty = function()
+	return redstone.getInput(sides.top) == 0
+end
+
 
 local function get_token()
 	local token = ""
@@ -8,59 +48,15 @@ local function get_token()
 	f:close()
 	return token
 end
+local db = require("dsx_db"):new( get_token() )
 
-local db = require("dsx_db"):new(get_token())
-
-local sides = {
-    bottom = 0,
-    top = 1,
-    back = 2,
-    front =3,
-    right = 4,
-	left = 5,
-	down = 0,
-	up = 1,
-	north = 2,
-	south = 3,
-	west = 4,
-	east = 5
-}
-
-local me = component.me_interface
-
-local redstone = component.redstone
-
-local currency = {
-	name = "minecraft:iron_ingot"
-}
-
-local function getCurrencyAmount()
+local currency = { name = "contenttweaker:money" }
+local count_currency = function()
 	local temp = me.getItemsInNetwork(currency)
 	if temp.n == 0 then
 		return 0
 	end
 	return temp[1].size
-end
-
-local function withdraw(nickname)
-
-	redstone.setOutput(sides.north, 13)
-	os.sleep(0.4) --подогнать
-	redstone.setOutput(sides.north, 0)
-
-	db:pay(nickname, -64)
-end
-
-local function withdraw_wrapper(nickname)
-	local currency = getCurrencyAmount()
-	if currency < 64 then
-		return false, "Недостаточно средств в банке"
-	end
-	if not db:has(nickname, 64) then
-		return false, "У вас недостаточно средств"
-	end
-	withdraw(nickname)
-	return true, currency
 end
 
 
@@ -70,140 +66,161 @@ local action = {
 	withdraw = 3
 }
 
-local function screen1()
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222, function(_,_,nickname)
-		return nickname
-	end)
-	ws:text(7, 13, "Нажмите на экран, чтобы начать работу", 0x222222, 0xeeeeee)
+local screen = {}
+
+screen.message = function( message )
+	local ws = Workspace:new(WIDTH, HEIGHT)
+	ws:add(
+		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, color.background)
+		:add(Element.text( Element.ALIGN_CENTER, Element.ALIGN_CENTER, message, color.foreground))
+	)
 	return ws
 end
 
-local function screen2(nickname)
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222)
-	ws:text(3,2, "Пользователь: " .. nickname, 0x222222, 0xeeeeee)
-	ws:text(3,3, "Баланс: " , 0x222222, 0xeeeeee)
-	ws:text(3,4, "Доступно на вывод: " , 0x222222, 0xeeeeee)
-	ws:bind(3,14,46,7,0xeeeeee, function( _, _, nickname, _, user )
-		if nickname == user then
-			return action.withdraw
-		end
-		return nil
-	end)
-	ws:text(21,17,"Снять 64", 0xeeeeee, 0x222222)
-	ws:bind(3,22, 46, 3, 0xeeeeee, function() 
-		return action.exit
-	end)
-	ws:text(23,23,"Выйти", 0xeeeeee, 0x222222)
+screen.loading = function()
+	return screen.message("Загрузка...")
+end
+
+screen.error = function(reason)
+	if reason == nil then
+		reason = "Причина не указана"
+	end
+	local ws = Workspace:new(WIDTH, HEIGHT)
+	ws:add(
+		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, color.background)
+		:add(Element.text( Element.ALIGN_CENTER, math.floor(HEIGHT/2)-1, "Произошла ошибка", color.error))
+		:add(Element.text( Element.ALIGN_CENTER, math.floor(HEIGHT/2)+1, reason, color.foreground))
+	)
 	return ws
 end
 
-local function screenError(reason)
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222, function( _, _, nickname, _, user )
-		return true
-	end)
-	ws:text(13, 12, reason, 0x222222, 0xeeeeee)
+screen.start = function()
+	local ws = Workspace:new(WIDTH, HEIGHT)
+	ws:add(
+		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, color.background,
+		function(_,_,nickname)
+			return nickname
+		end)
+		:add(Element.text(
+			Element.ALIGN_CENTER, 
+			Element.ALIGN_CENTER, 
+			"Нажмите на экран, чтобы начать работу", 
+			color.foreground
+		))
+	)
 	return ws
 end
 
-local function drawCurrency()
-	local amount = getCurrencyAmount()
-	local ws = Workspace:new()
-	ws:bind(22,4, 20, 1, 0x222222)
-	ws:text(22,4, tostring(math.floor(amount)) .. " коинов" , 0x222222, 0xeeeeee)
-	ws:draw()
-end
-
-local function loadingscreen()
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222)
-	ws:text(20, 12, "Загрузка...", 0x222222, 0xeeeeee)
+screen.terminal = function()
+	local ws = Workspace:new(WIDTH, HEIGHT)
+	ws:add(
+		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, color.background)
+		:add(Element.text( 3, 2, "Пользователь: " , color.foreground ))
+		:add(Element.text( 3, 3, "Баланс: " , color.foreground))
+		:add(Element.text( 3, 4, "Доступно на вывод: " , color.foreground))
+		:add(
+			Element.block( 3, 14, 46, 7, color.foreground, function( _, _, nickname, _, user )
+				if nickname == user then
+					return action.withdraw
+				end
+				return nil
+			end)
+			:add(Element.text(Element.ALIGN_CENTER, Element.ALIGN_CENTER, "Снять 16", color.background))
+		)
+		:add(
+			Element.block(3,22, 46, 3, color.foreground, function() 
+				return action.exit
+			end)
+			:add(Element.text(Element.ALIGN_CENTER, Element.ALIGN_CENTER, "Выйти", color.background))
+		)
+	)
 	return ws
 end
 
-local function screenTakeIron()
-	local ws = Workspace:new(50,25)
-	ws:bind(1,1,50,25, 0x222222)
-	ws:text(18, 12, "Заберите железо", 0x222222, 0xeeeeee)
-	ws:draw()
+--[[
+	required fields:
+	- nickname
+	- balance
+]]--
+
+screen.terminalOverlay = function( details )
+	details.avaliable = math.floor( count_currency() / 16 ) * 16
+
+	local ws = Workspace:new(WIDTH, HEIGHT)
+	ws:add(
+		Element.block( 0, 0, Element.INHERIT, Element.INHERIT, Element.TRANSPARENT)
+		:add(Element.text(17, 2, details.nickname, color.foreground, color.background))
+		:add(Element.text(11, 3, math.floor(details.balance), color.foreground, color.background))
+		:add(Element.text(22, 4, math.floor(details.avaliable) , color.foreground, color.background))
+	)
+	return ws
 end
 
+------------- logic -------------
 
-local function logic3(status, reason, nickname) --ошибка
-	if status == false then --ошибка
-		local ws = screenError(reason)
-		ws:draw()
-		local time = os.time()
-		while not ws.buttons:pull(nickname) do
-			if os.time() - time > 750 then
-				break
-			end
-			os.sleep(0)
-		end
-	end
-end
-
-
-local function logic2(nickname) --основное меню
-	local ws = screen2(nickname)
-	local ws_loading = loadingscreen()
-	if redstone.getInput(sides.east) ~= 0 then
-		screenTakeIron()
-		while redstone.getInput(sides.east) ~= 0 do
-			os.sleep(0)
-		end
-	end
-	ws_loading:draw()
-	os.sleep(0)
-	local balance = db:get(nickname)
-	ws:text(11,3, tostring(balance), 0x222222, 0xeeeeee)
-	ws:draw()
-	local time = os.time()
-	while 1 do
-		if os.time() - time > 750 then
-			return true
-		end
-		if redstone.getInput(sides.east) ~= 0 then
-			screenTakeIron()
-			while redstone.getInput(sides.east) ~= 0 do
-				os.sleep(0)
-			end
-			ws:draw()
-		end
-		drawCurrency()
-		local type = ws.buttons:pull(nickname)
-		if type == action.exit then
-			return true -- logic 1
-		elseif type == action.withdraw then
-			ws_loading:draw()
-			os.sleep(0)
-			local status, reason = withdraw_wrapper(nickname)
-			logic3(status, reason, nickname)
-			return false
-		end
-		
-	end
-end
-
-local function logic1() --экран "начать"
-	local ws = screen1()
-	ws:draw()
-	local nickname = nil
-	while nickname == nil do
-		nickname = ws.buttons:pull()
-	end
-	while not logic2(nickname) do
-		os.sleep(0)
-	end
-end
-
-
+local screen__start = screen.start()
+local screen__terminal = screen.terminal()
+local screen__loading = screen.loading()
+local screen__takeCurrency = screen.message("Заберите предметы из сундука")
 
 while true do
-	logic1()
+	::continue::
 	os.sleep(0)
+
+	if not chest.isEmpty() then
+		screen__takeCurrency:draw()
+		while not chest.isEmpty() do
+			os.sleep(0)
+		end
+		screen__terminal:draw()
+	end
+	
+	screen__start:draw()
+	local nickname = nil
+	while nickname == nil do
+		nickname = screen__start.buttons:pull()
+	end
+	screen__loading:draw()
+
+	while true do
+		os.sleep(0)
+		
+		if not chest.isEmpty() then
+			screen__takeCurrency:draw()
+			while not chest.isEmpty() do
+				os.sleep(0)
+			end
+		end
+		
+		screen__terminal:draw()
+		screen.terminalOverlay({
+			nickname = nickname,
+			balance = db:get(nickname)
+		}):draw()
+
+		local type = ws.buttons:pull(nickname)
+		if type == action.exit then
+			goto continue
+		elseif type == action.withdraw then
+			screen__loading:draw()
+			os.sleep(0)
+			local status = true, reason
+			if not db:has(nickname, 16) then
+				status = false
+				reason = "У вас недостаточно средств"
+			elseif count_currency() < 16 then
+				status = false
+				reason = "Недостаточно средств в терминале"
+			end
+			if status == false then
+				screen.error(reason)
+			else 
+				bus.export.turnOn()
+				os.sleep(0.4) --подогнать
+				bus.export.turnOff()
+				db:pay(nickname, -16)
+			end
+			goto continue
+		end
+	end
 end
-
-

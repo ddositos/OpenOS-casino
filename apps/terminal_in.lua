@@ -163,16 +163,17 @@ end
 
 ------------- logic -------------
 
+local screen__start = screen.start()
+local screen__terminal = screen.terminal()
 while true do
 	::continue::
 	bus.import.turnOff()
-	local screen__start = screen.start()
 	screen__start:draw()
 	local nickname = nil
 	while nickname == nil do
 		nickname = screen__start.buttons:pull()
 	end
-	local screen__terminal = screen.terminal()
+	
 	screen__terminal:draw()
 	bus.import.turnOn()
 
