@@ -182,6 +182,8 @@ while true do
 	end
 	screen__loading:draw()
 
+	screen__terminal:draw()
+
 	while true do
 		os.sleep(0)
 		
@@ -190,9 +192,10 @@ while true do
 			while not chest.isEmpty() do
 				os.sleep(0)
 			end
+			screen__terminal:draw()
 		end
 		
-		screen__terminal:draw()
+		
 		screen.terminalOverlay({
 			nickname = nickname,
 			balance = db:get(nickname)
@@ -216,7 +219,7 @@ while true do
 				screen.error(reason)
 			else 
 				bus.export.turnOn()
-				os.sleep(0.4) --подогнать
+				os.sleep(0.5) --подогнать
 				bus.export.turnOff()
 				db:pay(nickname, -16)
 			end
