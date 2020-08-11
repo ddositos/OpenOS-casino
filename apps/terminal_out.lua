@@ -206,7 +206,7 @@ while true do
 		elseif type == action.withdraw then
 			screen__loading:draw()
 			os.sleep(0)
-			local status = true, reason
+			local status = true, reason 
 			if not db:has(nickname, 16) then
 				status = false
 				reason = "У вас недостаточно средств"
@@ -215,7 +215,7 @@ while true do
 				reason = "Недостаточно средств в терминале"
 			end
 			if status == false then
-				screen.error(reason)
+				screen.error(reason):draw()
 				os.sleep(2)
 			else 
 				bus.export.turnOn()
