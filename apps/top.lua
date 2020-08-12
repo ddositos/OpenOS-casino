@@ -49,7 +49,7 @@ while true do
 	end
 	wrapper:draw()
 	
-	os.sleep(300)
+	os.sleep(5)
 end
 
 
